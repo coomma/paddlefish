@@ -11,7 +11,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import { Bot } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { z } from 'zod';
 
 type SubmitButtonProps = {
@@ -23,22 +22,20 @@ import { useFormStatus } from 'react-dom';
 
 function SubmitButton({ children }: SubmitButtonProps) {
   const { pending } = useFormStatus();
-  const t = useTranslations('GuestbookPage');
   return (
     <Button type="submit" disabled={pending}>
-      {pending ? t('submittingButton') : children}
+      {pending ? "Submitting..." : children}
     </Button>
   );
 }
 
 export default function Guestbook({ initialComments }: { initialComments: Comment[] }) {
-  const t = useTranslations('GuestbookPage');
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
   
   const commentSchema = z.object({
-    author: z.string().min(2, { message: t('formErrors.authorMissing') }).max(50),
-    message: z.string().min(10, { message: t('formErrors.messageMissing') }).max(500),
+    author: z.string().min(2, { message: "Name must be at least 2 characters." }).max(50),
+    message: z.string().min(10, { message: "Message must be at least 10 characters." }).max(500),
   });
 
   const initialState: FormState = { message: '', success: false };
@@ -51,30 +48,30 @@ export default function Guestbook({ initialComments }: { initialComments: Commen
     if (formState.success) {
       toast({
         title: 'Success!',
-        description: t('successMessage'),
+        description: "Your comment has been posted.",
       });
       formRef.current?.reset();
     } else if (formState.errors?._form) {
        toast({
         variant: 'destructive',
         title: 'Error',
-        description: t('unexpectedError'),
+        description: "An unexpected error occurred.",
       });
-    } else if (!formState.success && formState.message) {
+    } else if (!formState.success && formState.message && (formState.errors?.author || formState.errors?.message)) {
       toast({
         variant: 'destructive',
-        title: 'Error',
-        description: formState.message,
+        title: 'Validation failed',
+        description: formState.errors?.author?.[0] || formState.errors?.message?.[0],
       });
     }
-  }, [formState, toast, t]);
+  }, [formState, toast]);
 
   return (
     <div className="space-y-12">
       <Card className="shadow-lg">
         <CardHeader>
-          <CardTitle className="font-headline text-2xl">{t('formTitle')}</CardTitle>
-          <CardDescription>{t('formDescription')}</CardDescription>
+          <CardTitle className="font-headline text-2xl">Leave a Comment</CardTitle>
+          <CardDescription>Your message will be reviewed by our AI moderator to ensure a respectful environment.</CardDescription>
         </CardHeader>
         <form ref={formRef} action={formAction}>
           <CardContent className="space-y-4">
@@ -82,7 +79,7 @@ export default function Guestbook({ initialComments }: { initialComments: Commen
               <Input
                 id="author"
                 name="author"
-                placeholder={t('authorPlaceholder')}
+                placeholder="Your Name"
                 required
                 aria-describedby="author-error"
                 maxLength={50}
@@ -95,7 +92,7 @@ export default function Guestbook({ initialComments }: { initialComments: Commen
               <Textarea
                 id="message"
                 name="message"
-                placeholder={t('messagePlaceholder')}
+                placeholder="Your message..."
                 required
                 rows={5}
                 aria-describedby="message-error"
@@ -107,13 +104,13 @@ export default function Guestbook({ initialComments }: { initialComments: Commen
             </div>
           </CardContent>
           <CardFooter>
-            <SubmitButton>{t('submitButton')}</SubmitButton>
+            <SubmitButton>Submit Comment</SubmitButton>
           </CardFooter>
         </form>
       </Card>
 
       <div className="space-y-6">
-        <h2 className="font-headline text-3xl text-primary text-center">{t('remembranceTitle')}</h2>
+        <h2 className="font-headline text-3xl text-primary text-center">Messages of Remembrance</h2>
         {initialComments.map((comment) => (
           <Card key={comment.id} className="shadow-md">
             <CardContent className="p-6">
@@ -127,7 +124,7 @@ export default function Guestbook({ initialComments }: { initialComments: Commen
                {comment.originalMessage && (
                   <div className="mt-4 p-3 bg-secondary/50 rounded-lg text-xs text-muted-foreground flex items-start gap-2">
                     <Bot className="h-4 w-4 flex-shrink-0 mt-0.5" />
-                    <span>{t('aiWarning')}</span>
+                    <span>This comment was automatically rewritten by AI to maintain a respectful tone.</span>
                   </div>
                 )}
             </CardContent>
