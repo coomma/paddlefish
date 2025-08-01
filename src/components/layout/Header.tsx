@@ -1,7 +1,6 @@
 'use client';
 
-import Link from 'next-intl/link';
-import { usePathname } from 'next-intl/navigation';
+import { Link, usePathname } from 'next-intl/navigation';
 import { NAV_LINKS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { Fish } from 'lucide-react';

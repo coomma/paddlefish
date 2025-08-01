@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { unstable_setRequestLocale } from 'next-intl/server';
-import Link from 'next-intl/link';
+import { Link } from 'next-intl/navigation';
 
 export default function StoriesPage({params: {locale}}: {params: {locale: string}}) {
   unstable_setRequestLocale(locale);

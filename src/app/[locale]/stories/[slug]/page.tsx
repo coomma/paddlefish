@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
 import { unstable_setRequestLocale } from 'next-intl/server';
-import Link from 'next-intl/link';
+import { Link } from 'next-intl/navigation';
 
 type StoryPageProps = {
   params: {
