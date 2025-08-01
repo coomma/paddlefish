@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Link, usePathname } from 'next-intl/navigation';
+import { Link, usePathname } from '@/navigation';
 import { NAV_LINKS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { Fish } from 'lucide-react';

@@ -1,7 +1,7 @@
 import { getStoryBySlug, stories } from '@/lib/stories';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Link } from 'next-intl/navigation';
+import { Link } from '@/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 

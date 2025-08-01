@@ -1,5 +1,5 @@
 import { stories, Story } from '@/lib/stories';
-import { Link } from 'next-intl/navigation';
+import { Link } from '@/navigation';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
