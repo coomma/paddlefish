@@ -1,0 +1,32 @@
+
+{
+  "Header": {
+    "home": "Home",
+    "details": "Details",
+    "pictures": "Pictures",
+    "distribution": "Distribution",
+    "biology": "Biology",
+    "stories": "Stories",
+    "references": "References",
+    "guestbook": "Guestbook"
+  },
+  "LanguageSwitcher": {
+    "label": "Language",
+    "en": "English",
+    "de": "German",
+    "fr": "French",
+    "ja": "Japanese",
+    "es": "Spanish",
+    "zh": "Chinese",
+    "la": "Latin"
+  },
+  "HomePage": {
+    "title": "Psephurus: A Requiem",
+    "subtitle": "In memory of the Chinese Paddlefish, lost to the river of time.",
+    "timelineTitle": "A Silent River: The Path to Extinction"
+  },
+  "DaysSinceExtinction": {
+    "calculating": "Calculating days since goodbye...",
+    "daysSince": "Today marks day {days} since the Chinese Paddlefish was declared extinct."
+  }
+}

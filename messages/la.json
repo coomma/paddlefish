@@ -1,0 +1,32 @@
+
+{
+  "Header": {
+    "home": "Domus",
+    "details": "Singula",
+    "pictures": "Imagines",
+    "distribution": "Distributio",
+    "biology": "Biologia",
+    "stories": "Fabulae",
+    "references": "Fontes",
+    "guestbook": "Liber Hospitum"
+  },
+  "LanguageSwitcher": {
+    "label": "Lingua",
+    "en": "Anglica",
+    "de": "Germanica",
+    "fr": "Gallica",
+    "ja": "Iaponica",
+    "es": "Hispanica",
+    "zh": "Sinica",
+    "la": "Latina"
+  },
+  "HomePage": {
+    "title": "Psephurus: Requiem",
+    "subtitle": "In memoriam Psephuri gladii, in flumine temporis amissi.",
+    "timelineTitle": "Flumen Silens: Via ad Exstinctionem"
+  },
+  "DaysSinceExtinction": {
+    "calculating": "Dies ex vale calculantur...",
+    "daysSince": "Hodie dies {days} est ex quo Psephurus gladius exstinctus declaratus est."
+  }
+}

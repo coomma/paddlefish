@@ -32,6 +32,8 @@ export default function LanguageSwitcher() {
             <SelectItem value="fr">{t('fr')}</SelectItem>
             <SelectItem value="ja">{t('ja')}</SelectItem>
             <SelectItem value="es">{t('es')}</SelectItem>
+            <SelectItem value="zh">{t('zh')}</SelectItem>
+            <SelectItem value="la">{t('la')}</SelectItem>
           </SelectContent>
         </Select>
     </div>

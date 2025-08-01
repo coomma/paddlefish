@@ -1,13 +1,15 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { Link, usePathname } from 'next-intl/navigation';
 import { NAV_LINKS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { Fish } from 'lucide-react';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header() {
   const pathname = usePathname();
+  const t = useTranslations('Header');
 
   return (
     <header className="bg-card/80 backdrop-blur-sm sticky top-0 z-40 border-b">
@@ -31,12 +33,12 @@ export default function Header() {
                       : 'text-foreground/70 hover:bg-primary/5 hover:text-primary'
                   )}
                 >
-                  {link.label}
+                  {t(link.label.toLowerCase() as any)}
                 </Link>
               );
             })}
           </nav>
-          {/* Language Switcher can be re-added here */}
+          <LanguageSwitcher />
         </div>
         {/* Mobile menu could be added here */}
       </div>

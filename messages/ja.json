@@ -1,0 +1,32 @@
+
+{
+  "Header": {
+    "home": "ホーム",
+    "details": "詳細",
+    "pictures": "写真",
+    "distribution": "分布",
+    "biology": "生物学",
+    "stories": "物語",
+    "references": "参考文献",
+    "guestbook": "ゲストブック"
+  },
+  "LanguageSwitcher": {
+    "label": "言語",
+    "en": "英語",
+    "de": "ドイツ語",
+    "fr": "フランス語",
+    "ja": "日本語",
+    "es": "スペイン語",
+    "zh": "中国語",
+    "la": "ラテン語"
+  },
+  "HomePage": {
+    "title": "プセフルス：レクイエム",
+    "subtitle": "時の川に失われた中国のヘラチョウザメを偲んで。",
+    "timelineTitle": "静かなる川：絶滅への道"
+  },
+  "DaysSinceExtinction": {
+    "calculating": "別れからの日数を計算中...",
+    "daysSince": "今日で中国のヘラチョウザメが絶滅したと宣言されてから{days}日目です。"
+  }
+}

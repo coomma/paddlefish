@@ -1,0 +1,32 @@
+
+{
+  "Header": {
+    "home": "Inicio",
+    "details": "Detalles",
+    "pictures": "Fotos",
+    "distribution": "Distribución",
+    "biology": "Biología",
+    "stories": "Historias",
+    "references": "Referencias",
+    "guestbook": "Libro de Visitas"
+  },
+  "LanguageSwitcher": {
+    "label": "Idioma",
+    "en": "Inglés",
+    "de": "Alemán",
+    "fr": "Francés",
+    "ja": "Japonés",
+    "es": "Español",
+    "zh": "Chino",
+    "la": "Latín"
+  },
+  "HomePage": {
+    "title": "Psephurus: Un Réquiem",
+    "subtitle": "En memoria del pez espátula chino, perdido en el río del tiempo.",
+    "timelineTitle": "Un río silencioso: El camino hacia la extinción"
+  },
+  "DaysSinceExtinction": {
+    "calculating": "Calculando los días desde el adiós...",
+    "daysSince": "Hoy se cumplen {days} días desde que el pez espátula chino fue declarado extinto."
+  }
+}

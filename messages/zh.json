@@ -1,0 +1,32 @@
+
+{
+  "Header": {
+    "home": "首页",
+    "details": "详情",
+    "pictures": "图片",
+    "distribution": "分布",
+    "biology": "生物学",
+    "stories": "故事",
+    "references": "参考文献",
+    "guestbook": "留言簿"
+  },
+  "LanguageSwitcher": {
+    "label": "语言",
+    "en": "英语",
+    "de": "德语",
+    "fr": "法语",
+    "ja": "日语",
+    "es": "西班牙语",
+    "zh": "中文",
+    "la": "拉丁语"
+  },
+  "HomePage": {
+    "title": "白鲟安魂曲",
+    "subtitle": "纪念逝于时间长河的中国匙吻鲟。",
+    "timelineTitle": "寂静的河流：灭绝之路"
+  },
+  "DaysSinceExtinction": {
+    "calculating": "正在计算告别后的天数...",
+    "daysSince": "今天距离白鲟被宣布灭绝已有 {days} 天。"
+  }
+}

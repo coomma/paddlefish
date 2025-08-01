@@ -1,0 +1,32 @@
+
+{
+  "Header": {
+    "home": "Startseite",
+    "details": "Details",
+    "pictures": "Bilder",
+    "distribution": "Verbreitung",
+    "biology": "Biologie",
+    "stories": "Geschichten",
+    "references": "Referenzen",
+    "guestbook": "Gästebuch"
+  },
+  "LanguageSwitcher": {
+    "label": "Sprache",
+    "en": "Englisch",
+    "de": "Deutsch",
+    "fr": "Französisch",
+    "ja": "Japanisch",
+    "es": "Spanisch",
+    "zh": "Chinesisch",
+    "la": "Latein"
+  },
+  "HomePage": {
+    "title": "Psephurus: Ein Requiem",
+    "subtitle": "Im Gedenken an den Chinesischen Schwertstör, verloren im Fluss der Zeit.",
+    "timelineTitle": "Ein stiller Fluss: Der Weg zum Aussterben"
+  },
+  "DaysSinceExtinction": {
+    "calculating": "Berechne die Tage seit dem Abschied...",
+    "daysSince": "Heute ist Tag {days}, seit der Chinesische Schwertstör für ausgestorben erklärt wurde."
+  }
+}

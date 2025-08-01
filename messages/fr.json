@@ -1,0 +1,32 @@
+
+{
+  "Header": {
+    "home": "Accueil",
+    "details": "Détails",
+    "pictures": "Photos",
+    "distribution": "Distribution",
+    "biology": "Biologie",
+    "stories": "Histoires",
+    "references": "Références",
+    "guestbook": "Livre d'or"
+  },
+  "LanguageSwitcher": {
+    "label": "Langue",
+    "en": "Anglais",
+    "de": "Allemand",
+    "fr": "Français",
+    "ja": "Japonais",
+    "es": "Espagnol",
+    "zh": "Chinois",
+    "la": "Latin"
+  },
+  "HomePage": {
+    "title": "Psephurus : Un Requiem",
+    "subtitle": "En mémoire du poisson-spatule chinois, perdu dans le fleuve du temps.",
+    "timelineTitle": "Un fleuve silencieux : Le chemin vers l'extinction"
+  },
+  "DaysSinceExtinction": {
+    "calculating": "Calcul des jours depuis l'adieu...",
+    "daysSince": "Aujourd'hui marque le {days}ème jour depuis que le poisson-spatule chinois a été déclaré éteint."
+  }
+}
