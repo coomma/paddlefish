@@ -1,14 +1,9 @@
 'use server';
 
-import { z } from 'zod';
+import { z, ZodSchema } from 'zod';
 import { moderateGuestbookComment } from '@/ai/flows/guestbook-comment-moderation';
 import { addComment } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
-
-export const commentSchema = z.object({
-  author: z.string().min(2, { message: 'Name must be at least 2 characters.' }).max(50),
-  message: z.string().min(10, { message: 'Message must be at least 10 characters.' }).max(500),
-});
 
 export type FormState = {
   message: string;
@@ -22,7 +17,8 @@ export type FormState = {
 
 export async function submitComment(
   prevState: FormState,
-  formData: FormData
+  formData: FormData,
+  commentSchema: ZodSchema
 ): Promise<FormState> {
   const validatedFields = commentSchema.safeParse({
     author: formData.get('author'),
@@ -50,6 +46,8 @@ export async function submitComment(
     });
     
     revalidatePath('/guestbook');
+    revalidatePath('/[locale]/guestbook', 'layout');
+
 
     return { message: 'Your comment has been posted.', success: true };
   } catch (error) {

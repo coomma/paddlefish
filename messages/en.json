@@ -1,0 +1,104 @@
+
+{
+  "Header": {
+    "title": "Psephurus",
+    "nav": {
+      "home": "Home",
+      "details": "Details",
+      "pictures": "Pictures",
+      "distribution": "Distribution",
+      "biology": "Biology",
+      "stories": "Stories",
+      "references": "References",
+      "guestbook": "Guestbook"
+    }
+  },
+  "Footer": {
+    "inMemoriam": "Psephurus gladius ~ In Memoriam ~ 1970s - 2022"
+  },
+  "HomePage": {
+    "title": "Psephurus: A Requiem",
+    "subtitle": "In memory of the Chinese Paddlefish, lost to the river of time.",
+    "daysSince": "Today marks day {days} since the Chinese Paddlefish was declared extinct.",
+    "calculating": "Calculating days since goodbye...",
+    "timelineTitle": "A Silent River: The Path to Extinction",
+    "timeline": [
+      { "date": "July 21, 2022", "description": "The International Union for Conservation of Nature (IUCN) declared the Chinese Paddlefish (Psephurus gladius) extinct." },
+      { "date": "2020", "description": "The Yangtze River Fisheries Research Institute, part of the Chinese Academy of Fishery Sciences, officially declared the Chinese Paddlefish extinct." },
+      { "date": "2017-2018", "description": "The Yangtze River Fisheries Research Institute conducted extensive surveys in the Yangtze River but found no Chinese Paddlefish. A 2019 paper suggested the species might be extinct, estimating extinction occurred between 2005 and 2010, and functional extinction possibly by 1993." },
+      { "date": "January 24, 2003", "description": "The last confirmed sighting of a Chinese Paddlefish. Fishermen in Nanxi County, Yibin City, accidentally caught one. It was released but never seen again." },
+      { "date": "1995", "description": "Juvenile Chinese Paddlefish were last seen." },
+      { "date": "1980s", "description": "Sightings became scarce; for example, only 32 Chinese Paddlefish were caught in 1985." },
+      { "date": "1970s", "description": "The estimated annual catch of Chinese Paddlefish was around 25 tons, indicating a once-thriving population." }
+    ]
+  },
+  "DetailsPage": {
+    "title": "Details",
+    "subtitle": "Anatomy of a River Giant",
+    "cardTitle": "Physical Characteristics",
+    "p1": "The Chinese Paddlefish was a truly remarkable creature, one of the largest freshwater fish in the world. Its most distinctive feature was its long, sword-like rostrum, or snout, which could account for up to a third of its total body length. This rostrum was covered in electroreceptors, which it used to detect the weak electrical fields of its prey, primarily small fish and crustaceans, in the murky waters of the Yangtze River.",
+    "p2": "Adults could reportedly reach up to 7 meters (23 feet) in length and weigh several hundred kilograms, although individuals of this size were rare in its final decades. The body was smooth and largely scaleless, with a grayish color that helped it blend into its environment. It possessed a large, toothless mouth and small, poorly developed eyes, suggesting it relied more on its rostrum than sight for hunting.",
+    "p3": "Its scientific name, <em>Psephurus gladius</em>, reflects its appearance: 'Psephurus' refers to its pebbly-skinned tail, and 'gladius' is Latin for 'sword', a clear reference to its prominent snout. This unique combination of features made it a top predator in its ecosystem and an icon of the Yangtze River's rich biodiversity."
+  },
+  "PicturesPage": {
+    "title": "Pictures",
+    "subtitle": "Fading Images of a Lost Giant",
+    "cardTitle": "Gallery"
+  },
+  "DistributionPage": {
+    "title": "Distribution",
+    "subtitle": "The Lost Kingdom of a River King",
+    "cardTitle": "Historical Habitat",
+    "p1": "The Chinese Paddlefish was endemic to the Yangtze River basin in China, the longest river in Asia. Its historical range extended throughout the main stem of the river and into some of its larger tributaries and connected lakes, such as Dongting Lake and Poyang Lake. The fish undertook long-distance migrations, with distinct spawning grounds in the upper reaches of the river and feeding areas in the lower and middle sections.",
+    "p2": "The construction of dams, most notably the Gezhouba Dam and the Three Gorges Dam, fragmented this vast habitat. These structures blocked the paddlefish's migratory routes, separating the adult fish in the lower river from their critical spawning grounds upstream. This fragmentation is considered the primary driver of the species' decline and eventual extinction, effectively shrinking its world until it vanished completely."
+  },
+  "BiologyPage": {
+    "title": "Biology",
+    "subtitle": "The Life of a Yangtze Native",
+    "cardTitle": "Lifecycle and Ecology",
+    "p1": "The Chinese Paddlefish was a potamodromous species, meaning it migrated long distances entirely within freshwater. They would spawn in the upper reaches of the Yangtze, in areas with fast-flowing water and gravel riverbeds, primarily between March and April. After hatching, the juveniles would drift downstream to the middle and lower sections of the river, where they would feed and mature.",
+    "p2": "As a piscivore, the paddlefish primarily fed on other fish, as well as some crustaceans. Its unique electrosensory rostrum was its primary tool for locating prey in the often-turbid waters of the Yangtze. This made it an apex predator, playing a crucial role in maintaining the health and balance of the river's fish populations.",
+    "p3": "The species was slow-growing and late to mature, with females reaching sexual maturity around age seven or eight. This slow reproductive rate made the population highly vulnerable to overfishing and habitat disruption. The combination of these biological traits with intense human pressures on the Yangtze River ecosystem created a perfect storm that ultimately led to its demise."
+  },
+  "StoriesPage": {
+    "title": "Stories",
+    "subtitle": "Recollections from the River's Edge",
+    "readFullStory": "Read Full Story"
+  },
+  "StoryPage": {
+    "backToStories": "Back to Stories",
+    "by": "By {author}"
+  },
+  "ReferencesPage": {
+    "title": "References",
+    "subtitle": "Further Reading and Sources",
+    "cardTitle": "Sources"
+  },
+  "GuestbookPage": {
+    "title": "Guestbook",
+    "subtitle": "Leave a memory or a thought for the lost giant.",
+    "formTitle": "Leave a Comment",
+    "formDescription": "Your message will be reviewed by our AI moderator to ensure a respectful environment.",
+    "authorPlaceholder": "Your Name",
+    "messagePlaceholder": "Your message...",
+    "submitButton": "Submit Comment",
+    "submittingButton": "Submitting...",
+    "remembranceTitle": "Messages of Remembrance",
+    "aiWarning": "This comment was automatically rewritten by AI to maintain a respectful tone.",
+    "successMessage": "Your comment has been posted.",
+    "validationFailed": "Validation failed.",
+    "unexpectedError": "An unexpected error occurred.",
+    "formErrors": {
+      "authorMissing": "Name must be at least 2 characters.",
+      "messageMissing": "Message must be at least 10 characters."
+    }
+  },
+  "LanguageSwitcher": {
+    "label": "Language",
+    "en": "English",
+    "de": "German",
+    "fr": "French",
+    "ja": "Japanese",
+    "es": "Spanish"
+  }
+}

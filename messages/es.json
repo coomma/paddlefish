@@ -1,0 +1,104 @@
+
+{
+  "Header": {
+    "title": "Psephurus",
+    "nav": {
+      "home": "Inicio",
+      "details": "Detalles",
+      "pictures": "Imágenes",
+      "distribution": "Distribución",
+      "biology": "Biología",
+      "stories": "Historias",
+      "references": "Referencias",
+      "guestbook": "Libro de visitas"
+    }
+  },
+  "Footer": {
+    "inMemoriam": "Psephurus gladius ~ En Memoria ~ 1970s - 2022"
+  },
+  "HomePage": {
+    "title": "Psephurus: Un Réquiem",
+    "subtitle": "En memoria del pez espátula chino, perdido en el río del tiempo.",
+    "daysSince": "Hoy se cumplen {days} días desde que el pez espátula chino fue declarado extinto.",
+    "calculating": "Calculando los días desde el adiós...",
+    "timelineTitle": "Un río silencioso: El camino hacia la extinción",
+    "timeline": [
+      { "date": "21 de julio de 2022", "description": "La Unión Internacional para la Conservación de la Naturaleza (UICN) declaró extinto al pez espátula chino (Psephurus gladius)." },
+      { "date": "2020", "description": "El Instituto de Investigación Pesquera del Río Yangtze, parte de la Academia China de Ciencias Pesqueras, declaró oficialmente extinto al pez espátula chino." },
+      { "date": "2017-2018", "description": "El Instituto de Investigación Pesquera del Río Yangtze realizó extensos sondeos en el río Yangtze pero no encontró ningún pez espátula chino. Un artículo de 2019 sugirió que la especie podría estar extinta, estimando que la extinción ocurrió entre 2005 y 2010, y la extinción funcional posiblemente en 1993." },
+      { "date": "24 de enero de 2003", "description": "El último avistamiento confirmado de un pez espátula chino. Unos pescadores en el condado de Nanxi, ciudad de Yibin, capturaron accidentalmente uno. Fue liberado pero nunca más se le volvió a ver." },
+      { "date": "1995", "description": "Se vieron por última vez juveniles de pez espátula chino." },
+      { "date": "Años 1980", "description": "Los avistamientos se hicieron escasos; por ejemplo, solo se capturaron 32 peces espátula chinos en 1985." },
+      { "date": "Años 1970", "description": "La captura anual estimada de pez espátula chino era de unas 25 toneladas, lo que indica una población que alguna vez fue próspera." }
+    ]
+  },
+  "DetailsPage": {
+    "title": "Detalles",
+    "subtitle": "Anatomía de un gigante de río",
+    "cardTitle": "Características Físicas",
+    "p1": "El pez espátula chino era una criatura verdaderamente notable, uno de los peces de agua dulce más grandes del mundo. Su rasgo más distintivo era su largo rostro en forma de espada, o hocico, que podía representar hasta un tercio de la longitud total de su cuerpo. Este rostro estaba cubierto de electrorreceptores, que utilizaba para detectar los débiles campos eléctricos de sus presas, principalmente pequeños peces y crustáceos, en las turbias aguas del río Yangtze.",
+    "p2": "Según los informes, los adultos podían alcanzar hasta 7 metros de longitud y pesar varios cientos de kilogramos, aunque los individuos de este tamaño fueron raros en sus últimas décadas. El cuerpo era liso y en gran parte sin escamas, con un color grisáceo que le ayudaba a camuflarse en su entorno. Poseía una boca grande y sin dientes y ojos pequeños y poco desarrollados, lo que sugiere que dependía más de su rostro que de la vista para cazar.",
+    "p3": "Su nombre científico, <em>Psephurus gladius</em>, refleja su apariencia: 'Psephurus' se refiere a su cola de piel pedregosa, y 'gladius' es latín para 'espada', una clara referencia a su prominente hocico. Esta combinación única de características lo convirtió en un depredador superior en su ecosistema y un icono de la rica biodiversidad del río Yangtze."
+  },
+  "PicturesPage": {
+    "title": "Imágenes",
+    "subtitle": "Imágenes desvanecidas de un gigante perdido",
+    "cardTitle": "Galería"
+  },
+  "DistributionPage": {
+    "title": "Distribución",
+    "subtitle": "El reino perdido de un rey del río",
+    "cardTitle": "Hábitat histórico",
+    "p1": "El pez espátula chino era endémico de la cuenca del río Yangtze en China, el río más largo de Asia. Su área de distribución histórica se extendía por todo el cauce principal del río y por algunos de sus afluentes más grandes y lagos conectados, como el lago Dongting y el lago Poyang. El pez realizaba largas migraciones, con zonas de desove distintas en los tramos superiores del río y zonas de alimentación en las secciones inferiores y medias.",
+    "p2": "La construcción de presas, especialmente la presa de Gezhouba y la presa de las Tres Gargantas, fragmentó este vasto hábitat. Estas estructuras bloquearon las rutas migratorias del pez espátula, separando a los peces adultos del curso inferior de sus zonas de desove críticas río arriba. Esta fragmentación se considera el principal motor del declive y la eventual extinción de la especie, reduciendo su mundo hasta que desapareció por completo."
+  },
+  "BiologyPage": {
+    "title": "Biología",
+    "subtitle": "La vida de un nativo del Yangtze",
+    "cardTitle": "Ciclo de vida y ecología",
+    "p1": "El pez espátula chino era una especie potamódroma, lo que significa que migraba largas distancias completamente dentro del agua dulce. Desovaban en los tramos superiores del Yangtze, en áreas con aguas de corriente rápida y lechos de grava, principalmente entre marzo y abril. Después de la eclosión, los juveniles derivaban río abajo hacia las secciones media e inferior del río, donde se alimentaban y maduraban.",
+    "p2": "Como piscívoro, el pez espátula se alimentaba principalmente de otros peces, así como de algunos crustáceos. Su singular rostro electrosensorial era su principal herramienta para localizar presas en las a menudo turbias aguas del Yangtze. Esto lo convertía en un depredador ápice, desempeñando un papel crucial en el mantenimiento de la salud y el equilibrio de las poblaciones de peces del río.",
+    "p3": "La especie era de crecimiento lento y maduración tardía, alcanzando las hembras la madurez sexual alrededor de los siete u ocho años. Esta lenta tasa de reproducción hizo que la población fuera muy vulnerable a la sobrepesca y la alteración del hábitat. La combinación de estos rasgos biológicos con las intensas presiones humanas sobre el ecosistema del río Yangtze creó una tormenta perfecta que finalmente condujo a su desaparición."
+  },
+  "StoriesPage": {
+    "title": "Historias",
+    "subtitle": "Recuerdos desde la orilla del río",
+    "readFullStory": "Leer historia completa"
+  },
+  "StoryPage": {
+    "backToStories": "Volver a las historias",
+    "by": "Por {author}"
+  },
+  "ReferencesPage": {
+    "title": "Referencias",
+    "subtitle": "Lecturas adicionales y fuentes",
+    "cardTitle": "Fuentes"
+  },
+  "GuestbookPage": {
+    "title": "Libro de visitas",
+    "subtitle": "Deja un recuerdo o un pensamiento para el gigante perdido.",
+    "formTitle": "Dejar un comentario",
+    "formDescription": "Tu mensaje será revisado por nuestro moderador de IA para garantizar un ambiente respetuoso.",
+    "authorPlaceholder": "Tu nombre",
+    "messagePlaceholder": "Tu mensaje...",
+    "submitButton": "Enviar comentario",
+    "submittingButton": "Enviando...",
+    "remembranceTitle": "Mensajes de recuerdo",
+    "aiWarning": "Este comentario fue reescrito automáticamente por la IA para mantener un tono respetuoso.",
+    "successMessage": "Tu comentario ha sido publicado.",
+    "validationFailed": "La validación falló.",
+    "unexpectedError": "Ocurrió un error inesperado.",
+    "formErrors": {
+      "authorMissing": "El nombre debe tener al menos 2 caracteres.",
+      "messageMissing": "El mensaje debe tener al menos 10 caracteres."
+    }
+  },
+  "LanguageSwitcher": {
+    "label": "Idioma",
+    "en": "Inglés",
+    "de": "Alemán",
+    "fr": "Francés",
+    "ja": "Japonés",
+    "es": "Español"
+  }
+}

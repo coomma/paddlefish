@@ -1,10 +1,12 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
 
 const EXTINCTION_DECLARED_DATE = new Date('2022-07-20');
 
 const DaysSinceExtinction = () => {
+  const t = useTranslations('HomePage');
   const [days, setDays] = useState<number | null>(null);
 
   useEffect(() => {
@@ -17,14 +19,14 @@ const DaysSinceExtinction = () => {
   if (days === null) {
     return (
        <p className="text-center text-lg text-foreground/80 mt-4 animate-pulse">
-          Calculating days since goodbye...
+          {t('calculating')}
         </p>
     );
   }
 
   return (
     <p className="text-center text-lg text-foreground/80 mt-4">
-      Today marks day {days} since the Chinese Paddlefish was declared extinct.
+      {t('daysSince', {days})}
     </p>
   );
 };
