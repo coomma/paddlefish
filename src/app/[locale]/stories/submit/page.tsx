@@ -4,7 +4,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Link } from '@/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ImageUp } from 'lucide-react';
 
 export default function SubmitStoryPage() {
   return (
@@ -35,6 +35,24 @@ export default function SubmitStoryPage() {
             <div>
               <Label htmlFor="title" className="text-lg font-semibold">Story Title</Label>
               <Input id="title" name="title" placeholder="A title for your story" className="mt-2" />
+            </div>
+             <div>
+              <Label htmlFor="picture" className="text-lg font-semibold">Upload a Picture (Optional)</Label>
+              <div className="mt-2 flex items-center justify-center w-full">
+                <label
+                  htmlFor="picture"
+                  className="flex flex-col items-center justify-center w-full h-48 border-2 border-border border-dashed rounded-lg cursor-pointer bg-card hover:bg-secondary"
+                >
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <ImageUp className="w-10 h-10 mb-3 text-muted-foreground" />
+                    <p className="mb-2 text-sm text-muted-foreground">
+                      <span className="font-semibold">Click to upload</span> or drag and drop
+                    </p>
+                    <p className="text-xs text-muted-foreground">PNG, JPG, or GIF (MAX. 5MB)</p>
+                  </div>
+                  <Input id="picture" name="picture" type="file" className="hidden" accept="image/png, image/jpeg, image/gif" />
+                </label>
+              </div>
             </div>
             <div>
               <Label htmlFor="story" className="text-lg font-semibold">Your Story</Label>
