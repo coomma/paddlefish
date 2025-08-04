@@ -7,4 +7,5 @@ export const NAV_LINKS = [
   { href: '/stories', label: 'Stories' },
   { href: '/references', label: 'References' },
   { href: '/guestbook', label: 'Guestbook' },
+  { href: '/hope', label: 'Hope' },
 ];
