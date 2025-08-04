@@ -2,7 +2,7 @@ import { stories, Story } from '@/lib/stories';
 import { Link } from '@/navigation';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, PlusCircle } from 'lucide-react';
 
 export default function StoriesPage() {
   return (
@@ -11,6 +11,15 @@ export default function StoriesPage() {
         <h1 className="text-4xl md:text-5xl font-headline font-bold text-primary">Stories</h1>
         <p className="text-lg text-foreground/80">Recollections from the River's Edge</p>
       </header>
+
+      <div className="mb-8 text-center">
+        <Button asChild>
+          <Link href="/stories/submit">
+            <PlusCircle className="mr-2 h-5 w-5" />
+            Submit Your Story
+          </Link>
+        </Button>
+      </div>
       
       <div className="space-y-8">
         {stories.map((story: Story) => (
