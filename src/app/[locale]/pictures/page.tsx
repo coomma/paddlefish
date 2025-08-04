@@ -2,12 +2,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 
 const images = [
-  { src: "https://placehold.co/600x400.png", alt: "Chinese Paddlefish illustration", hint: "paddlefish illustration" },
-  { src: "https://placehold.co/600x400.png", alt: "Yangtze River", hint: "Yangtze river" },
-  { src: "https://placehold.co/600x400.png", alt: "Preserved specimen of a Chinese Paddlefish", hint: "fish museum" },
-  { src: "https://placehold.co/600x400.png", alt: "A historical photo of a fisherman with a Paddlefish", hint: "vintage fishing" },
-  { src: "https://placehold.co/600x400.png", alt: "Artistic rendering of a swimming Paddlefish", hint: "fish underwater" },
-  { src: "https://placehold.co/600x400.png", alt: "The misty mountains along the Yangtze", hint: "river china" },
+  { src: "/images/paddlefish-illustration.jpg", alt: "Chinese Paddlefish illustration", hint: "paddlefish illustration" },
+  { src: "/images/yangtze-river.jpg", alt: "Yangtze River", hint: "Yangtze river" },
+  { src: "/images/preserved-specimen.jpg", alt: "Preserved specimen of a Chinese Paddlefish", hint: "fish museum" },
+  { src: "/images/historical-photo.jpg", alt: "A historical photo of a fisherman with a Paddlefish", hint: "vintage fishing" },
+  { src: "/images/artistic-rendering.jpg", alt: "Artistic rendering of a swimming Paddlefish", hint: "fish underwater" },
+  { src: "/images/yangtze-misty-mountains.jpg", alt: "The misty mountains along the Yangtze", hint: "river china" },
 ];
 
 export default function PicturesPage() {
