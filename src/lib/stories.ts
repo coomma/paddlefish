@@ -43,7 +43,8 @@ export const staticStories: Story[] = [
 
 export async function getAllStories(): Promise<Story[]> {
   const dbStories = await getDbStories();
-  return [...staticStories, ...dbStories];
+  const allStories = [...staticStories, ...dbStories];
+  return allStories;
 }
 
 export async function getStoryBySlug(slug: string): Promise<Story | undefined> {
@@ -51,7 +52,6 @@ export async function getStoryBySlug(slug: string): Promise<Story | undefined> {
   if (staticStory) {
     return staticStory;
   }
-  // This needs to be async to correctly fetch from the database.
   const dbStory = await getDbStoryBySlug(slug);
   return dbStory;
-};
+}

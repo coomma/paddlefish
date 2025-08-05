@@ -79,7 +79,7 @@ export async function getComments(): Promise<Comment[]> {
     createdAt: new Date(row.createdAt),
     isAppropriate: row.isAppropriate === 1,
   }));
-};
+}
 
 export async function addComment(comment: Omit<Comment, 'id' | 'createdAt'>): Promise<Comment> {
   const createdAt = new Date();
@@ -100,7 +100,7 @@ export async function addComment(comment: Omit<Comment, 'id' | 'createdAt'>): Pr
   };
 
   return newComment;
-};
+}
 
 // --- Story Functions ---
 
@@ -108,7 +108,7 @@ export async function getDbStories(): Promise<Story[]> {
   const stmt = db.prepare('SELECT * FROM stories ORDER BY createdAt DESC');
   const rows = stmt.all() as any[];
   return rows.map(row => ({ ...row }));
-};
+}
 
 export async function addStory(story: Omit<Story, 'id' | 'createdAt' | 'slug'> & {slug: string}): Promise<Story> {
   const createdAt = new Date();
@@ -128,10 +128,10 @@ export async function addStory(story: Omit<Story, 'id' | 'createdAt' | 'slug'> &
   };
 
   return newStory;
-};
+}
 
 export async function getDbStoryBySlug(slug: string): Promise<Story | undefined> {
   const stmt = db.prepare('SELECT * FROM stories WHERE slug = ?');
   const row = stmt.get(slug) as any;
   return row ? { ...row } : undefined;
-};
+}
