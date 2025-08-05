@@ -70,7 +70,7 @@ if (commentCount.count === 0) {
 }
 
 
-export const getComments = async (): Promise<Comment[]> => {
+export async function getComments(): Promise<Comment[]> {
   const stmt = db.prepare('SELECT * FROM comments ORDER BY createdAt DESC');
   const rows = stmt.all() as any[];
 
@@ -81,7 +81,7 @@ export const getComments = async (): Promise<Comment[]> => {
   }));
 };
 
-export const addComment = async (comment: Omit<Comment, 'id' | 'createdAt'>): Promise<Comment> => {
+export async function addComment(comment: Omit<Comment, 'id' | 'createdAt'>): Promise<Comment> {
   const createdAt = new Date();
   const stmt = db.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
   
@@ -110,7 +110,7 @@ export async function getDbStories(): Promise<Story[]> {
   return rows.map(row => ({ ...row }));
 };
 
-export const addStory = async (story: Omit<Story, 'id' | 'createdAt' | 'slug'> & {slug: string}): Promise<Story> => {
+export async function addStory(story: Omit<Story, 'id' | 'createdAt' | 'slug'> & {slug: string}): Promise<Story> {
   const createdAt = new Date();
   const stmt = db.prepare('INSERT INTO stories (slug, title, author, summary, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)');
   

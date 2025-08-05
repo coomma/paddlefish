@@ -25,8 +25,8 @@ export const staticStories: Story[] = [
     author: 'Conservation Scientist',
     summary: 'An analysis of how dam construction on the Yangtze sealed the fate of the paddlefish.',
     content: `
-      <p>The story of the Chinese Paddlefish is inextricably linked to the story of the Yangtze River's development. For millennia, the fish followed an ancient migratory path, traveling hundreds of kilometers upstream to spawn. The construction of the Gezhouba Dam in 1981 was the first major blow. It was built without a fish ladder, creating an impassable barrier.</p>
-      <p>The paddlefish population was instantly fragmented. The fish downstream could no longer reach their spawning grounds. While some spawning may have occurred below the dam, it was insufficient to sustain the population. The later construction of the even larger Three Gorges Dam further altered the river's hydrology and sealed the species' fate. The river that had been its cradle for millions of years became its tomb.</p>
+      <p>The story of the Chinese Paddlefish is inextricably linked to the story of the Yangtze River\'s development. For millennia, the fish followed an ancient migratory path, traveling hundreds of kilometers upstream to spawn. The construction of the Gezhouba Dam in 1981 was the first major blow. It was built without a fish ladder, creating an impassable barrier.</p>
+      <p>The paddlefish population was instantly fragmented. The fish downstream could no longer reach their spawning grounds. While some spawning may have occurred below the dam, it was insufficient to sustain the population. The later construction of the even larger Three Gorges Dam further altered the river\'s hydrology and sealed the species\' fate. The river that had been its cradle for millions of years became its tomb.</p>
     `
   },
   {
@@ -51,6 +51,7 @@ export async function getStoryBySlug(slug: string): Promise<Story | undefined> {
   if (staticStory) {
     return staticStory;
   }
+  // This needs to be async to correctly fetch from the database.
   const dbStory = await getDbStoryBySlug(slug);
   return dbStory;
 };
