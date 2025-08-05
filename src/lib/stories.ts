@@ -41,12 +41,12 @@ export const staticStories: Story[] = [
   }
 ];
 
-export const getAllStories = async (): Promise<Story[]> => {
+export async function getAllStories(): Promise<Story[]> {
   const dbStories = await getDbStories();
   return [...staticStories, ...dbStories];
 }
 
-export const getStoryBySlug = async (slug: string): Promise<Story | undefined> => {
+export async function getStoryBySlug(slug: string): Promise<Story | undefined> {
   const staticStory = staticStories.find((s) => s.slug === slug);
   if (staticStory) {
     return staticStory;
