@@ -2,12 +2,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 
 const images = [
-  { src: "/images/paddlefish-illustration.jpg", alt: "Chinese Paddlefish illustration", hint: "paddlefish illustration" },
-  { src: "/images/yangtze-river.jpg", alt: "Yangtze River", hint: "Yangtze river" },
-  { src: "/images/preserved-specimen.jpg", alt: "Preserved specimen of a Chinese Paddlefish", hint: "fish museum" },
-  { src: "/images/historical-photo.jpg", alt: "A historical photo of a fisherman with a Paddlefish", hint: "vintage fishing" },
-  { src: "/images/artistic-rendering.jpg", alt: "Artistic rendering of a swimming Paddlefish", hint: "fish underwater" },
-  { src: "/images/yangtze-misty-mountains.jpg", alt: "The misty mountains along the Yangtze", hint: "river china" },
+  { src: "/images/fish1.webp", alt: "Chinese Paddlefish ", hint: "paddlefish" },
+  { src: "/images/fish2.webp", alt: "Chinese Paddlefish ", hint: "paddlefish" },
+  { src: "/images/poemfish.png", alt: "poem for Chinese Paddlefish", hint: "poem" },
+  { src: "/images/poemfish2.png", alt: "poem for Chinese Paddlefish", hint: "poem" },
+  { src: "/images/Yangtze1.jpg", alt: "the Yangtze river", hint: "Yangtze" },
+  { src: "/images/Yangtze2.jpg", alt: "Artistic rendering of a swimming Paddlefish", hint: "Yangtze" },
+  { src: "/images/Yangtze3.jpg", alt: "The misty mountains along the Yangtze", hint: "river china" },
 ];
 
 export default function PicturesPage() {
