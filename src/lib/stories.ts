@@ -1,3 +1,5 @@
+import { getDbStories, getDbStoryBySlug } from "./db";
+
 export type Story = {
   slug: string;
   title: string;
@@ -6,7 +8,7 @@ export type Story = {
   content: string;
 };
 
-export const stories: Story[] = [
+export const staticStories: Story[] = [
   {
     slug: 'the-last-sighting',
     title: 'The Last Sighting',
@@ -39,6 +41,15 @@ export const stories: Story[] = [
   }
 ];
 
+export const getAllStories = async (): Promise<Story[]> => {
+  const dbStories = await getDbStories();
+  return [...staticStories, ...dbStories];
+}
+
 export const getStoryBySlug = (slug: string): Story | undefined => {
-  return stories.find((s) => s.slug === slug);
+  const staticStory = staticStories.find((s) => s.slug === slug);
+  if (staticStory) {
+    return staticStory;
+  }
+  return getDbStoryBySlug(slug);
 };

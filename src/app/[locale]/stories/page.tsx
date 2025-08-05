@@ -1,10 +1,12 @@
-import { stories, Story } from '@/lib/stories';
+import { getAllStories, Story } from '@/lib/stories';
 import { Link } from '@/navigation';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, PlusCircle } from 'lucide-react';
 
-export default function StoriesPage() {
+export default async function StoriesPage() {
+  const stories = await getAllStories();
+
   return (
     <div className="max-w-4xl mx-auto">
       <header className="text-center mb-12">

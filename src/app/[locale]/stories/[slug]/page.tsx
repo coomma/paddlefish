@@ -1,4 +1,4 @@
-import { getStoryBySlug, stories } from '@/lib/stories';
+import { getStoryBySlug, getAllStories, Story } from '@/lib/stories';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Link } from '@/navigation';
@@ -11,13 +11,15 @@ type StoryPageProps = {
   };
 };
 
-export function generateStaticParams() {
-  return stories.map((story) => ({
+// This allows Next.js to generate static pages for all stories at build time
+export async function generateStaticParams() {
+  const allStories = await getAllStories();
+  return allStories.map((story) => ({
     slug: story.slug,
   }));
 }
 
-export default function StoryPage({ params }: StoryPageProps) {
+export default async function StoryPage({ params }: StoryPageProps) {
   const story = getStoryBySlug(params.slug);
 
   if (!story) {

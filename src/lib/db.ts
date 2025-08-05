@@ -1,6 +1,7 @@
 'use server';
 
 import Database from 'better-sqlite3';
+import type { Story } from '@/lib/stories';
 
 export interface Comment {
   id: number;
@@ -13,7 +14,7 @@ export interface Comment {
 
 const db = new Database('paddlefish.db');
 
-// Create the table if it doesn't exist
+// Create comments table
 db.exec(`
   CREATE TABLE IF NOT EXISTS comments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,9 +26,23 @@ db.exec(`
   )
 `);
 
-// Seed with initial data if the table is empty
-const count = db.prepare('SELECT COUNT(*) as count FROM comments').get() as { count: number };
-if (count.count === 0) {
+// Create stories table
+db.exec(`
+  CREATE TABLE IF NOT EXISTS stories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    slug TEXT NOT NULL UNIQUE,
+    title TEXT NOT NULL,
+    author TEXT NOT NULL,
+    summary TEXT NOT NULL,
+    content TEXT NOT NULL,
+    createdAt DATETIME NOT NULL
+  )
+`);
+
+
+// Seed comments with initial data if the table is empty
+const commentCount = db.prepare('SELECT COUNT(*) as count FROM comments').get() as { count: number };
+if (commentCount.count === 0) {
   const seed = [
     {
       author: 'River Enthusiast',
@@ -45,13 +60,13 @@ if (count.count === 0) {
     },
   ];
 
-  const insert = db.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
-  const insertMany = db.transaction((comments) => {
+  const insertComment = db.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
+  const insertManyComments = db.transaction((comments) => {
     for (const comment of comments) {
-      insert.run(comment.author, comment.message, comment.createdAt.toISOString(), comment.isAppropriate, comment.originalMessage);
+      insertComment.run(comment.author, comment.message, comment.createdAt.toISOString(), comment.isAppropriate, comment.originalMessage);
     }
   });
-  insertMany(seed);
+  insertManyComments(seed);
 }
 
 
@@ -85,4 +100,38 @@ export const addComment = async (comment: Omit<Comment, 'id' | 'createdAt'>): Pr
   };
 
   return newComment;
+};
+
+// --- Story Functions ---
+
+export const getDbStories = async (): Promise<Story[]> => {
+  const stmt = db.prepare('SELECT * FROM stories ORDER BY createdAt DESC');
+  const rows = stmt.all() as any[];
+  return rows.map(row => ({ ...row }));
+};
+
+export const addStory = async (story: Omit<Story, 'id' | 'createdAt' | 'slug'> & {slug: string}): Promise<Story> => {
+  const createdAt = new Date();
+  const stmt = db.prepare('INSERT INTO stories (slug, title, author, summary, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)');
+  
+  const result = stmt.run(
+    story.slug,
+    story.title,
+    story.author,
+    story.summary,
+    story.content,
+    createdAt.toISOString()
+  );
+
+  const newStory: Story = {
+    ...story,
+  };
+
+  return newStory;
+};
+
+export const getDbStoryBySlug = (slug: string): Story | undefined => {
+  const stmt = db.prepare('SELECT * FROM stories WHERE slug = ?');
+  const row = stmt.get(slug) as any;
+  return row ? { ...row } : undefined;
 };
