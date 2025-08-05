@@ -51,8 +51,6 @@ export async function submitComment(
     });
     
     revalidatePath('/guestbook');
-    revalidatePath('/[locale]/guestbook', 'layout');
-
 
     return { message: 'Your comment has been posted.', success: true };
   } catch (error) {
