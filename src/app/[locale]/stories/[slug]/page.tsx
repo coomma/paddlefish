@@ -20,7 +20,7 @@ export async function generateStaticParams() {
 }
 
 export default async function StoryPage({ params }: StoryPageProps) {
-  const story = getStoryBySlug(params.slug);
+  const story = await getStoryBySlug(params.slug);
 
   if (!story) {
     notFound();
