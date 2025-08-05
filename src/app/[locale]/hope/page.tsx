@@ -11,6 +11,23 @@ export default function HopePage() {
       <div className="space-y-12">
         <Card className="shadow-lg">
           <CardHeader>
+            <CardTitle className="font-headline text-3xl text-primary">The De-Extinction Dream</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 text-foreground/90 leading-relaxed">
+            <p>
+              The story of the Chinese Paddlefish is one of profound loss, a cautionary tale of what happens when human development outpaces ecological wisdom. For millions of years, this gentle giant navigated the murky waters of the Yangtze, a testament to nature's enduring power. Its extinction, declared in 2022, left a void not just in the river, but in our collective natural heritage.
+            </p>
+            <p>
+              But in the face of irreversible loss, humanity dares to dream. The burgeoning field of de-extinction, powered by advances in genetic engineering and synthetic biology, offers a tantalizing, if distant, possibility. The recent work by companies like Colossal Biosciences to resurrect species like the woolly mammoth and the thylacine has ignited a global conversation. Could the same technologies one day be applied to the Chinese Paddlefish?
+            </p>
+            <p>
+              The path would be fraught with immense scientific and ethical challenges. It would require a complete genome, a suitable surrogate species (perhaps its distant cousin, the American Paddlefish), and a restored, healthy Yangtze River ecosystem for it to survive. While the dream of seeing a living paddlefish again remains in the realm of science fiction for now, it serves as a powerful symbol of hope. It reminds us that our capacity for innovation can be used not just to build, but to heal, and that the memory of what we have lost can fuel a new resolve to protect what remains.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-lg">
+          <CardHeader>
             <CardTitle className="font-headline text-3xl text-primary">Echoes in the Deep: Mourning the Loss of the Chinese Paddlefish and Hoping for a Revival</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-foreground/90 leading-relaxed prose prose-lg max-w-none">
@@ -50,7 +67,7 @@ export default function HopePage() {
             
             <h4 className="font-headline text-xl text-primary !mt-6 !mb-2">Ex Situ Conservation and Breeding Programs</h4>
             <p>
-              Establishing and expanding captive breeding programs for the Chinese sturgeon and other endangered fish is essential. These efforts must be closely coordinated with international conservation institutions and guided by rigorous science.
+              Establishing and expanding captive breeding programs for the Chinese sturgeon and other endangered fish is essential. These efforts must be closely coordinated with international conservation institutions and guided by a rigorous science.
             </p>
 
             <h4 className="font-headline text-xl text-primary !mt-6 !mb-2">Targeted Habitat Protection</h4>
