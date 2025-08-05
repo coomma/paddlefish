@@ -130,7 +130,7 @@ export const addStory = async (story: Omit<Story, 'id' | 'createdAt' | 'slug'> &
   return newStory;
 };
 
-export const getDbStoryBySlug = (slug: string): Story | undefined => {
+export const getDbStoryBySlug = async (slug: string): Promise<Story | undefined> => {
   const stmt = db.prepare('SELECT * FROM stories WHERE slug = ?');
   const row = stmt.get(slug) as any;
   return row ? { ...row } : undefined;
