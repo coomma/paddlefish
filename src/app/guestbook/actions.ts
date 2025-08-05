@@ -15,10 +15,15 @@ export type FormState = {
   success: boolean;
 };
 
+// Define the schema here, it's a server-concern
+const commentSchema = z.object({
+  author: z.string().min(2, { message: "Name must be at least 2 characters." }).max(50),
+  message: z.string().min(10, { message: "Message must be at least 10 characters." }).max(500),
+});
+
 export async function submitComment(
   prevState: FormState,
-  formData: FormData,
-  commentSchema: ZodSchema
+  formData: FormData
 ): Promise<FormState> {
   const validatedFields = commentSchema.safeParse({
     author: formData.get('author'),

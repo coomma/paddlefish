@@ -11,14 +11,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import { Bot } from 'lucide-react';
-import { z } from 'zod';
+import { useFormStatus } from 'react-dom';
 
 type SubmitButtonProps = {
   children: React.ReactNode;
 };
-
-// We need to import `useFormStatus` in a separate client component
-import { useFormStatus } from 'react-dom';
 
 function SubmitButton({ children }: SubmitButtonProps) {
   const { pending } = useFormStatus();
@@ -32,17 +29,9 @@ function SubmitButton({ children }: SubmitButtonProps) {
 export default function Guestbook({ initialComments }: { initialComments: Comment[] }) {
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
-  
-  const commentSchema = z.object({
-    author: z.string().min(2, { message: "Name must be at least 2 characters." }).max(50),
-    message: z.string().min(10, { message: "Message must be at least 10 characters." }).max(500),
-  });
 
   const initialState: FormState = { message: '', success: false };
-  const [formState, formAction] = useFormState(
-    (prevState: FormState, formData: FormData) => submitComment(prevState, formData, commentSchema), 
-    initialState
-  );
+  const [formState, formAction] = useFormState(submitComment, initialState);
 
   useEffect(() => {
     if (formState.success) {
