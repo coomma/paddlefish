@@ -71,69 +71,96 @@ if (commentCount.count === 0) {
 
 
 export async function getComments(): Promise<Comment[]> {
-  const stmt = db.prepare('SELECT * FROM comments ORDER BY createdAt DESC');
-  const rows = stmt.all() as any[];
-
-  return rows.map(row => ({
-    ...row,
-    createdAt: new Date(row.createdAt),
-    isAppropriate: row.isAppropriate === 1,
-  }));
+  return new Promise((resolve, reject) => {
+    try {
+      const stmt = db.prepare('SELECT * FROM comments ORDER BY createdAt DESC');
+      const rows = stmt.all() as any[];
+      resolve(rows.map(row => ({
+        ...row,
+        createdAt: new Date(row.createdAt),
+        isAppropriate: row.isAppropriate === 1,
+      })));
+    } catch (error) {
+      reject(error);
+    }
+  });
 }
 
 export async function addComment(comment: Omit<Comment, 'id' | 'createdAt'>): Promise<Comment> {
-  const createdAt = new Date();
-  const stmt = db.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
-  
-  const result = stmt.run(
-    comment.author,
-    comment.message,
-    createdAt.toISOString(),
-    comment.isAppropriate ? 1 : 0,
-    comment.originalMessage
-  );
+    return new Promise((resolve, reject) => {
+        try {
+            const createdAt = new Date();
+            const stmt = db.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
+            
+            const result = stmt.run(
+                comment.author,
+                comment.message,
+                createdAt.toISOString(),
+                comment.isAppropriate ? 1 : 0,
+                comment.originalMessage
+            );
 
-  const newComment: Comment = {
-    ...comment,
-    id: result.lastInsertRowid as number,
-    createdAt,
-  };
-
-  return newComment;
+            const newComment: Comment = {
+                ...comment,
+                id: result.lastInsertRowid as number,
+                createdAt,
+            };
+            resolve(newComment);
+        } catch (error) {
+            reject(error);
+        }
+    });
 }
 
 // --- Story Functions ---
 
 export async function getDbStories(): Promise<Story[]> {
-  const stmt = db.prepare('SELECT * FROM stories ORDER BY createdAt DESC');
-  const rows = stmt.all() as any[];
-  return rows.map(row => ({ ...row, createdAt: new Date(row.createdAt) }));
+    return new Promise((resolve, reject) => {
+        try {
+            const stmt = db.prepare('SELECT * FROM stories ORDER BY createdAt DESC');
+            const rows = stmt.all() as any[];
+            resolve(rows.map(row => ({ ...row, createdAt: new Date(row.createdAt) })));
+        } catch (error) {
+            reject(error);
+        }
+    });
 }
 
 export async function addStory(story: Omit<Story, 'id' | 'createdAt' | 'slug'> & {slug: string}): Promise<Story> {
-  const createdAt = new Date();
-  const stmt = db.prepare('INSERT INTO stories (slug, title, author, summary, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)');
-  
-  const result = stmt.run(
-    story.slug,
-    story.title,
-    story.author,
-    story.summary,
-    story.content,
-    createdAt.toISOString()
-  );
+    return new Promise((resolve, reject) => {
+        try {
+            const createdAt = new Date();
+            const stmt = db.prepare('INSERT INTO stories (slug, title, author, summary, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)');
+            
+            stmt.run(
+                story.slug,
+                story.title,
+                story.author,
+                story.summary,
+                story.content,
+                createdAt.toISOString()
+            );
 
-  const newStory: Story = {
-    ...story,
-    createdAt,
-  };
-
-  return newStory;
+            const newStory: Story = {
+                ...story,
+                createdAt,
+            };
+            resolve(newStory);
+        } catch(error) {
+            reject(error);
+        }
+    });
 }
 
-export function getDbStoryBySlug(slug: string): Story | undefined {
-  const stmt = db.prepare('SELECT * FROM stories WHERE slug = ?');
-  const row = stmt.get(slug) as any;
-  if (!row) return undefined;
-  return { ...row, createdAt: new Date(row.createdAt) };
+export async function getDbStoryBySlug(slug: string): Promise<Story | undefined> {
+    return new Promise((resolve, reject) => {
+        try {
+            const stmt = db.prepare('SELECT * FROM stories WHERE slug = ?');
+            const row = stmt.get(slug) as any;
+            if (!row) return resolve(undefined);
+            resolve({ ...row, createdAt: new Date(row.createdAt) });
+        } catch (error) {
+            reject(error);
+        }
+    });
 }
