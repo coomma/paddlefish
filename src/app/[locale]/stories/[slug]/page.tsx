@@ -45,7 +45,7 @@ export default async function StoryPage({ params }: StoryPageProps) {
         <CardContent>
           <div 
             className="prose prose-lg max-w-none text-foreground/90 leading-relaxed space-y-4"
-            dangerouslySetInnerHTML={{ __html: story.content }}
+            dangerouslySetInnerHTML={story.content}
           />
         </CardContent>
       </Card>
