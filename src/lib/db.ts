@@ -131,7 +131,7 @@ export async function addStory(story: Omit<Story, 'id' | 'createdAt' | 'slug'> &
   return newStory;
 }
 
-export async function getDbStoryBySlug(slug: string): Promise<Story | undefined> {
+export function getDbStoryBySlug(slug: string): Story | undefined {
   const stmt = db.prepare('SELECT * FROM stories WHERE slug = ?');
   const row = stmt.get(slug) as any;
   if (!row) return undefined;
