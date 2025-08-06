@@ -70,7 +70,7 @@ if (commentCount.count === 0) {
 }
 
 
-export const getComments = async (): Promise<Comment[]> => {
+export async function getComments(): Promise<Comment[]> {
   const stmt = db.prepare('SELECT * FROM comments ORDER BY createdAt DESC');
   const rows = stmt.all() as any[];
 
@@ -79,9 +79,9 @@ export const getComments = async (): Promise<Comment[]> => {
     createdAt: new Date(row.createdAt),
     isAppropriate: row.isAppropriate === 1,
   }));
-};
+}
 
-export const addComment = async (comment: Omit<Comment, 'id' | 'createdAt'>): Promise<Comment> => {
+export async function addComment(comment: Omit<Comment, 'id' | 'createdAt'>): Promise<Comment> {
   const createdAt = new Date();
   const stmt = db.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
   
@@ -100,17 +100,17 @@ export const addComment = async (comment: Omit<Comment, 'id' | 'createdAt'>): Pr
   };
 
   return newComment;
-};
+}
 
 // --- Story Functions ---
 
-export const getDbStories = async (): Promise<Story[]> => {
+export async function getDbStories(): Promise<Story[]> {
   const stmt = db.prepare('SELECT * FROM stories ORDER BY createdAt DESC');
   const rows = stmt.all() as any[];
-  return rows.map(row => ({ ...row }));
-};
+  return rows.map(row => ({ ...row, createdAt: new Date(row.createdAt) }));
+}
 
-export const addStory = async (story: Omit<Story, 'id' | 'createdAt' | 'slug'> & {slug: string}): Promise<Story> => {
+export async function addStory(story: Omit<Story, 'id' | 'createdAt' | 'slug'> & {slug: string}): Promise<Story> {
   const createdAt = new Date();
   const stmt = db.prepare('INSERT INTO stories (slug, title, author, summary, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)');
   
@@ -125,13 +125,15 @@ export const addStory = async (story: Omit<Story, 'id' | 'createdAt' | 'slug'> &
 
   const newStory: Story = {
     ...story,
+    createdAt,
   };
 
   return newStory;
-};
+}
 
-export const getDbStoryBySlug = async (slug: string): Promise<Story | undefined> => {
+export async function getDbStoryBySlug(slug: string): Promise<Story | undefined> {
   const stmt = db.prepare('SELECT * FROM stories WHERE slug = ?');
   const row = stmt.get(slug) as any;
-  return row ? { ...row } : undefined;
-};
+  if (!row) return undefined;
+  return { ...row, createdAt: new Date(row.createdAt) };
+}
