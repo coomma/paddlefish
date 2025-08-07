@@ -1,4 +1,4 @@
-import { getStoryBySlug, getAllStories, Story } from '@/lib/stories';
+import { getStoryBySlug, getAllStories } from '@/lib/stories';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Link } from '@/navigation';

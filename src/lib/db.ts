@@ -2,15 +2,15 @@
 
 import Database from 'better-sqlite3';
 
-// The Story type from stories.ts is the source of truth, 
-// but we need a version for the DB which has `content` as a string.
-interface DbStory {
+// This represents the story as it is in the database.
+// The content is a raw HTML string.
+export interface DbStory {
     id: number;
     slug: string;
     title: string;
     author: string;
     summary: string;
-    content: string;
+    content: string; // Stored as a string in DB
     createdAt: Date;
 }
 
@@ -115,10 +115,10 @@ export async function addComment(comment: Omit<Comment, 'id' | 'createdAt'>): Pr
 
 // --- Story Functions ---
 
-export async function getDbStories(): Promise<DbStory[]> {
+export async function getDbStories(): Promise<Omit<DbStory, 'id' | 'createdAt'>[]> {
     return new Promise((resolve, reject) => {
         try {
-            const stmt = db.prepare('SELECT * FROM stories ORDER BY createdAt DESC');
+            const stmt = db.prepare('SELECT slug, title, author, summary, content, createdAt FROM stories ORDER BY createdAt DESC');
             const rows = stmt.all() as any[];
             resolve(rows.map(row => ({ ...row, createdAt: new Date(row.createdAt) })));
         } catch (error) {
@@ -147,10 +147,10 @@ export async function addStory(story: Omit<DbStory, 'id' | 'createdAt'>): Promis
     });
 }
 
-export async function getDbStoryBySlug(slug: string): Promise<DbStory | undefined> {
+export async function getDbStoryBySlug(slug: string): Promise<Omit<DbStory, 'id' | 'createdAt'> | undefined> {
     return new Promise((resolve, reject) => {
         try {
-            const stmt = db.prepare('SELECT * FROM stories WHERE slug = ?');
+            const stmt = db.prepare('SELECT slug, title, author, summary, content, createdAt FROM stories WHERE slug = ?');
             const row = stmt.get(slug) as any;
             if (row) {
                 resolve({ ...row, createdAt: new Date(row.createdAt) });
