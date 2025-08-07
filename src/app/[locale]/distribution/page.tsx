@@ -19,7 +19,7 @@ export default function DistributionPage() {
           </p>
           <div className="my-6 border rounded-lg overflow-hidden shadow-md">
             <Image 
-              src="https://placehold.co/800x500.png"
+              src="/images/paddlefish.jpg"
               alt="Map of the Yangtze River showing the historical distribution of the Chinese Paddlefish"
               width={800}
               height={500}
