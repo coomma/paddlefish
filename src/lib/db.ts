@@ -31,12 +31,9 @@ const dbPath = process.env.NODE_ENV === 'development'
   : path.join('/tmp', 'paddlefish.db');
 
 function initializeDb() {
-    // Ensure the directory exists in development
-    if (process.env.NODE_ENV === 'development') {
-        const dir = path.dirname(dbPath);
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
+    const dir = path.dirname(dbPath);
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
     }
     
     const db = new Database(dbPath);
