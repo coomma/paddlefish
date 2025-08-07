@@ -1,6 +1,8 @@
 'use server';
 
 import Database from 'better-sqlite3';
+import path from 'path';
+import fs from 'fs';
 
 // This represents the story as it is in the database.
 // The content is a raw HTML string.
@@ -23,61 +25,74 @@ export interface Comment {
   originalMessage?: string;
 }
 
-function initializeDb() {
-  const db = new Database('paddlefish.db');
-  // Create tables if they don't exist
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS comments (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      author TEXT NOT NULL,
-      message TEXT NOT NULL,
-      createdAt DATETIME NOT NULL,
-      isAppropriate INTEGER NOT NULL,
-      originalMessage TEXT
-    )
-  `);
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS stories (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      slug TEXT NOT NULL UNIQUE,
-      title TEXT NOT NULL,
-      author TEXT NOT NULL,
-      summary TEXT NOT NULL,
-      content TEXT NOT NULL,
-      createdAt DATETIME NOT NULL
-    )
-  `);
-  return db;
-}
+// Use /tmp directory for the database to ensure writability on server environments
+const dbPath = process.env.NODE_ENV === 'development' 
+  ? 'paddlefish.db' 
+  : path.join('/tmp', 'paddlefish.db');
 
-// Seed data if necessary
-const dbForSeed = initializeDb();
-const commentCount = dbForSeed.prepare('SELECT COUNT(*) as count FROM comments').get() as { count: number };
-if (commentCount.count === 0) {
-  const seed = [
-    {
-      author: 'River Enthusiast',
-      message: 'A tragic loss for the world. The Yangtze will never be the same. May we learn from this.',
-      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
-      isAppropriate: 1,
-      originalMessage: null,
-    },
-    {
-      author: 'Jane D.',
-      message: 'I remember reading about this majestic fish as a child. It\'s heartbreaking to know it\'s gone forever. A beautiful memorial.',
-      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
-      isAppropriate: 1,
-      originalMessage: null,
-    },
-  ];
-  const insertComment = dbForSeed.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
-  dbForSeed.transaction((comments) => {
-    for (const comment of comments) {
-      insertComment.run(comment.author, comment.message, comment.createdAt.toISOString(), comment.isAppropriate, comment.originalMessage);
+function initializeDb() {
+    // Ensure the directory exists in development
+    if (process.env.NODE_ENV === 'development') {
+        const dir = path.dirname(dbPath);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
     }
-  })(seed);
+    
+    const db = new Database(dbPath);
+    
+    // Create tables if they don't exist
+    db.exec(`
+        CREATE TABLE IF NOT EXISTS comments (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        author TEXT NOT NULL,
+        message TEXT NOT NULL,
+        createdAt DATETIME NOT NULL,
+        isAppropriate INTEGER NOT NULL,
+        originalMessage TEXT
+        )
+    `);
+    db.exec(`
+        CREATE TABLE IF NOT EXISTS stories (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        slug TEXT NOT NULL UNIQUE,
+        title TEXT NOT NULL,
+        author TEXT NOT NULL,
+        summary TEXT NOT NULL,
+        content TEXT NOT NULL,
+        createdAt DATETIME NOT NULL
+        )
+    `);
+
+    // Seed data if necessary
+    const commentCount = db.prepare('SELECT COUNT(*) as count FROM comments').get() as { count: number };
+    if (commentCount.count === 0) {
+        const seed = [
+            {
+            author: 'River Enthusiast',
+            message: 'A tragic loss for the world. The Yangtze will never be the same. May we learn from this.',
+            createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
+            isAppropriate: 1,
+            originalMessage: null,
+            },
+            {
+            author: 'Jane D.',
+            message: 'I remember reading about this majestic fish as a child. It\'s heartbreaking to know it\'s gone forever. A beautiful memorial.',
+            createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
+            isAppropriate: 1,
+            originalMessage: null,
+            },
+        ];
+        const insertComment = db.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
+        db.transaction((comments) => {
+            for (const comment of comments) {
+            insertComment.run(comment.author, comment.message, comment.createdAt.toISOString(), comment.isAppropriate, comment.originalMessage);
+            }
+        })(seed);
+    }
+
+    return db;
 }
-dbForSeed.close();
 
 
 // --- Comment Functions ---
