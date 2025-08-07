@@ -1,4 +1,4 @@
-import { getDbStories, getDbStoryBySlug } from "./db";
+import { getDbStories, getDbStoryBySlug, DbStory } from "./db";
 
 export type Story = {
   slug: string;
@@ -44,12 +44,21 @@ export const staticStories: Story[] = [
   }
 ];
 
+function dbStoryToStory(dbStory: DbStory): Story {
+  return {
+    slug: dbStory.slug,
+    title: dbStory.title,
+    author: dbStory.author,
+    summary: dbStory.summary,
+    content: { __html: dbStory.content }
+  };
+}
+
+
 export async function getAllStories(): Promise<Story[]> {
   const dbStories = await getDbStories();
-  const allStories = [...staticStories, ...dbStories.map(story => ({
-      ...story,
-      content: { __html: story.content }
-  }))];
+  const allStories = [...staticStories, ...dbStories.map(dbStoryToStory)];
+  // No need to sort, as getDbStories already sorts by date
   return allStories;
 }
 
@@ -60,10 +69,7 @@ export async function getStoryBySlug(slug: string): Promise<Story | undefined> {
   }
   const dbStory = await getDbStoryBySlug(slug);
   if (dbStory) {
-    return {
-        ...dbStory,
-        content: { __html: dbStory.content }
-    }
+    return dbStoryToStory(dbStory);
   }
   return undefined;
 }

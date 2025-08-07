@@ -4,7 +4,6 @@
 import { z } from 'zod';
 import { addStory } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
-import { redirect } from '@/navigation';
 
 export type FormState = {
   message: string;
@@ -69,6 +68,8 @@ export async function submitStory(
     });
     
     revalidatePath('/stories');
+    revalidatePath('/[locale]/stories', 'layout');
+
 
     // To see the success message, we can't redirect immediately.
     // The redirect will be handled on the client-side upon seeing success: true.

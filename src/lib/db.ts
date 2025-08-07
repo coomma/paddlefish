@@ -10,8 +10,8 @@ export interface DbStory {
     title: string;
     author: string;
     summary: string;
-    content: string; // Stored as a string in DB
-    createdAt: Date;
+    content: string;
+    createdAt: string; // Stored as string in DB
 }
 
 export interface Comment {
@@ -23,33 +23,36 @@ export interface Comment {
   originalMessage?: string;
 }
 
-const db = new Database('paddlefish.db');
+function initializeDb() {
+  const db = new Database('paddlefish.db');
+  // Create tables if they don't exist
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS comments (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      author TEXT NOT NULL,
+      message TEXT NOT NULL,
+      createdAt DATETIME NOT NULL,
+      isAppropriate INTEGER NOT NULL,
+      originalMessage TEXT
+    )
+  `);
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS stories (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      slug TEXT NOT NULL UNIQUE,
+      title TEXT NOT NULL,
+      author TEXT NOT NULL,
+      summary TEXT NOT NULL,
+      content TEXT NOT NULL,
+      createdAt DATETIME NOT NULL
+    )
+  `);
+  return db;
+}
 
-// Create tables if they don't exist
-db.exec(`
-  CREATE TABLE IF NOT EXISTS comments (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    author TEXT NOT NULL,
-    message TEXT NOT NULL,
-    createdAt DATETIME NOT NULL,
-    isAppropriate INTEGER NOT NULL,
-    originalMessage TEXT
-  )
-`);
-db.exec(`
-  CREATE TABLE IF NOT EXISTS stories (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    slug TEXT NOT NULL UNIQUE,
-    title TEXT NOT NULL,
-    author TEXT NOT NULL,
-    summary TEXT NOT NULL,
-    content TEXT NOT NULL,
-    createdAt DATETIME NOT NULL
-  )
-`);
-
-// Seed comments
-const commentCount = db.prepare('SELECT COUNT(*) as count FROM comments').get() as { count: number };
+// Seed data if necessary
+const dbForSeed = initializeDb();
+const commentCount = dbForSeed.prepare('SELECT COUNT(*) as count FROM comments').get() as { count: number };
 if (commentCount.count === 0) {
   const seed = [
     {
@@ -67,98 +70,89 @@ if (commentCount.count === 0) {
       originalMessage: null,
     },
   ];
-
-  const insertComment = db.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
-  db.transaction((comments) => {
+  const insertComment = dbForSeed.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
+  dbForSeed.transaction((comments) => {
     for (const comment of comments) {
       insertComment.run(comment.author, comment.message, comment.createdAt.toISOString(), comment.isAppropriate, comment.originalMessage);
     }
   })(seed);
 }
+dbForSeed.close();
+
 
 // --- Comment Functions ---
 
 export async function getComments(): Promise<Comment[]> {
-  return new Promise((resolve, reject) => {
-    try {
-      const stmt = db.prepare('SELECT * FROM comments ORDER BY createdAt DESC');
-      const rows = stmt.all() as any[];
-      resolve(rows.map(row => ({
-        ...row,
-        createdAt: new Date(row.createdAt),
-        isAppropriate: row.isAppropriate === 1,
-      })));
-    } catch (error) {
-      reject(error);
-    }
-  });
+  const db = initializeDb();
+  try {
+    const stmt = db.prepare('SELECT * FROM comments ORDER BY createdAt DESC');
+    const rows = stmt.all() as any[];
+    return rows.map(row => ({
+      ...row,
+      createdAt: new Date(row.createdAt),
+      isAppropriate: row.isAppropriate === 1,
+    }));
+  } finally {
+    db.close();
+  }
 }
 
 export async function addComment(comment: Omit<Comment, 'id' | 'createdAt'>): Promise<Comment> {
-    return new Promise((resolve, reject) => {
-        try {
-            const createdAt = new Date();
-            const stmt = db.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
-            const result = stmt.run(
-                comment.author,
-                comment.message,
-                createdAt.toISOString(),
-                comment.isAppropriate ? 1 : 0,
-                comment.originalMessage
-            );
-            resolve({ ...comment, id: result.lastInsertRowid as number, createdAt });
-        } catch (error) {
-            reject(error);
-        }
-    });
+  const db = initializeDb();
+  try {
+    const createdAt = new Date();
+    const stmt = db.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
+    const result = stmt.run(
+        comment.author,
+        comment.message,
+        createdAt.toISOString(),
+        comment.isAppropriate ? 1 : 0,
+        comment.originalMessage
+    );
+    return { ...comment, id: result.lastInsertRowid as number, createdAt };
+  } finally {
+    db.close();
+  }
 }
 
 // --- Story Functions ---
 
-export async function getDbStories(): Promise<Omit<DbStory, 'id' | 'createdAt'>[]> {
-    return new Promise((resolve, reject) => {
-        try {
-            const stmt = db.prepare('SELECT slug, title, author, summary, content, createdAt FROM stories ORDER BY createdAt DESC');
-            const rows = stmt.all() as any[];
-            resolve(rows.map(row => ({ ...row, createdAt: new Date(row.createdAt) })));
-        } catch (error) {
-            reject(error);
-        }
-    });
+export async function getDbStories(): Promise<DbStory[]> {
+  const db = initializeDb();
+  try {
+    const stmt = db.prepare('SELECT id, slug, title, author, summary, content, createdAt FROM stories ORDER BY createdAt DESC');
+    return stmt.all() as DbStory[];
+  } finally {
+    db.close();
+  }
 }
 
 export async function addStory(story: Omit<DbStory, 'id' | 'createdAt'>): Promise<DbStory> {
-    return new Promise((resolve, reject) => {
-        try {
-            const createdAt = new Date();
-            const stmt = db.prepare('INSERT INTO stories (slug, title, author, summary, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)');
-            const result = stmt.run(
-                story.slug,
-                story.title,
-                story.author,
-                story.summary,
-                story.content,
-                createdAt.toISOString()
-            );
-            resolve({ ...story, id: result.lastInsertRowid as number, createdAt });
-        } catch(error) {
-            reject(error);
-        }
-    });
+  const db = initializeDb();
+  try {
+    const createdAt = new Date();
+    const stmt = db.prepare('INSERT INTO stories (slug, title, author, summary, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)');
+    const result = stmt.run(
+        story.slug,
+        story.title,
+        story.author,
+        story.summary,
+        story.content,
+        createdAt.toISOString()
+    );
+    return { ...story, id: result.lastInsertRowid as number, createdAt: createdAt.toISOString() };
+  } finally {
+    db.close();
+  }
 }
 
-export async function getDbStoryBySlug(slug: string): Promise<Omit<DbStory, 'id' | 'createdAt'> | undefined> {
-    return new Promise((resolve, reject) => {
-        try {
-            const stmt = db.prepare('SELECT slug, title, author, summary, content, createdAt FROM stories WHERE slug = ?');
-            const row = stmt.get(slug) as any;
-            if (row) {
-                resolve({ ...row, createdAt: new Date(row.createdAt) });
-            } else {
-                resolve(undefined);
-            }
-        } catch (error) {
-            reject(error);
-        }
-    });
+export async function getDbStoryBySlug(slug: string): Promise<DbStory | undefined> {
+  const db = initializeDb();
+  try {
+    const stmt = db.prepare('SELECT id, slug, title, author, summary, content, createdAt FROM stories WHERE slug = ?');
+    const row = stmt.get(slug) as DbStory | undefined;
+    return row;
+  } finally {
+    db.close();
+  }
 }
