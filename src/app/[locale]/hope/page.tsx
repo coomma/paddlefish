@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { unstable_setRequestLocale } from "next-intl/server";
 
-export default function HopePage() {
+export default function HopePage({ params: { locale } }: { params: { locale: string } }) {
+  unstable_setRequestLocale(locale);
   return (
     <div className="max-w-4xl mx-auto">
       <header className="text-center mb-12">

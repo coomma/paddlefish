@@ -1,15 +1,14 @@
-import {notFound} from 'next/navigation';
 import {getRequestConfig} from 'next-intl/server';
-
-// Can be imported from a shared config
-export const locales = ['en', 'de', 'fr', 'ja', 'es', 'zh', 'la'];
-
+import {locales} from '@/lib/constants';
+ 
 export default getRequestConfig(async ({locale}) => {
   // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale as any)) notFound();
-
+  if (!locales.includes(locale as any)) {
+    throw new Error(`Invalid locale: ${locale}`);
+  }
+ 
   return {
-    locale,
-    messages: (await import(`../messages/${locale}.json`)).default
+    messages: (await import(`../messages/${locale}.json`)).default,
+    locale: locale
   };
 });

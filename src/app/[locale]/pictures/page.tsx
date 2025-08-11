@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
+import { unstable_setRequestLocale } from "next-intl/server";
 
 const images = [
   { src: "https://placehold.co/600x400.png", alt: "Chinese Paddlefish illustration", hint: "paddlefish illustration" },
@@ -10,7 +11,8 @@ const images = [
   { src: "https://placehold.co/600x400.png", alt: "The misty mountains along the Yangtze", hint: "river china" },
 ];
 
-export default function PicturesPage() {
+export default function PicturesPage({ params: { locale } }: { params: { locale: string } }) {
+  unstable_setRequestLocale(locale);
   return (
     <div className="max-w-6xl mx-auto">
       <header className="text-center mb-12">

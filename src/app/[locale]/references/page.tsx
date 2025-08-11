@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ExternalLink } from "lucide-react";
+import { unstable_setRequestLocale } from "next-intl/server";
 
 const references = [
   {
@@ -24,7 +25,8 @@ const references = [
   }
 ];
 
-export default function ReferencesPage() {
+export default function ReferencesPage({ params: { locale } }: { params: { locale: string } }) {
+  unstable_setRequestLocale(locale);
   return (
     <div className="max-w-4xl mx-auto">
       <header className="text-center mb-12">

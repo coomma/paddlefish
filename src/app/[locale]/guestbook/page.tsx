@@ -1,7 +1,9 @@
 import { getComments } from '@/lib/db';
 import Guestbook from '@/components/guestbook/Guestbook';
+import { unstable_setRequestLocale } from 'next-intl/server';
 
-export default async function GuestbookPage() {
+export default async function GuestbookPage({ params: { locale } }: { params: { locale: string } }) {
+  unstable_setRequestLocale(locale);
   const comments = await getComments();
 
   return (

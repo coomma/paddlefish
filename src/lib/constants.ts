@@ -1,3 +1,4 @@
+
 export const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/details', label: 'Details' },
@@ -9,3 +10,5 @@ export const NAV_LINKS = [
   { href: '/guestbook', label: 'Guestbook' },
   { href: '/hope', label: 'Hope' },
 ];
+
+export const locales = ['en', 'de', 'fr', 'ja', 'es', 'zh', 'la'] as const;
