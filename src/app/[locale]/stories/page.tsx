@@ -3,8 +3,16 @@ import { Link } from '@/navigation';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, PlusCircle } from 'lucide-react';
+import { unstable_setRequestLocale } from 'next-intl/server';
 
-export default async function StoriesPage() {
+type StoriesPageProps = {
+  params: {
+    locale: string;
+  };
+};
+
+export default async function StoriesPage({ params: { locale } }: StoriesPageProps) {
+  unstable_setRequestLocale(locale);
   const stories = await getAllStories();
 
   return (

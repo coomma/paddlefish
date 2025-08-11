@@ -4,15 +4,17 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Link } from '@/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { unstable_setRequestLocale } from 'next-intl/server';
 
 type StoryPageProps = {
   params: {
     slug: string;
+    locale: string;
   };
 };
 
 // This allows Next.js to generate static pages for all stories at build time
-export async function generateStaticParams() {
+export async function generateStaticParams({ params: { locale } }: { params: { locale: string } }) {
   const allStories = await getAllStories();
   return allStories.map((story) => ({
     slug: story.slug,
@@ -20,6 +22,7 @@ export async function generateStaticParams() {
 }
 
 export default async function StoryPage({ params }: StoryPageProps) {
+  unstable_setRequestLocale(params.locale);
   const story = await getStoryBySlug(params.slug);
 
   if (!story) {
