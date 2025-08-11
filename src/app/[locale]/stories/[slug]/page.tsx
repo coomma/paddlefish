@@ -5,6 +5,7 @@ import { Link } from '@/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { unstable_setRequestLocale } from 'next-intl/server';
+import { locales } from '@/lib/constants';
 
 type StoryPageProps = {
   params: {
@@ -13,12 +14,18 @@ type StoryPageProps = {
   };
 };
 
-// This allows Next.js to generate static pages for all stories at build time
-export async function generateStaticParams({ params: { locale } }: { params: { locale: string } }) {
+// This allows Next.js to generate static pages for all stories at build time for all locales
+export async function generateStaticParams() {
   const allStories = await getAllStories();
-  return allStories.map((story) => ({
-    slug: story.slug,
-  }));
+ 
+  const params = locales.flatMap((locale) =>
+    allStories.map((story) => ({
+      locale,
+      slug: story.slug,
+    }))
+  );
+
+  return params;
 }
 
 export default async function StoryPage({ params }: StoryPageProps) {
