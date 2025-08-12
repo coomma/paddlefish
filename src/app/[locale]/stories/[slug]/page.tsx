@@ -1,13 +1,10 @@
-export const dynamic = "force-static";
-// ...existing imports and code...
-import { getStoryBySlug, getAllStorySlugs } from '@/lib/stories';
+import { getStoryBySlug } from '@/lib/stories';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Link } from '@/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { unstable_setRequestLocale } from 'next-intl/server';
-import { locales } from '@/lib/constants';
 
 type StoryPageProps = {
   params: {
@@ -15,19 +12,6 @@ type StoryPageProps = {
     locale: string;
   };
 };
-
-export async function generateStaticParams() {
-  const slugs = await getAllStorySlugs();
- 
-  const params = locales.flatMap((locale) =>
-    slugs.map((slug) => ({
-      locale,
-      slug,
-    }))
-  );
- 
-  return params;
-}
 
 export default async function StoryPage({ params }: StoryPageProps) {
   unstable_setRequestLocale(params.locale);
