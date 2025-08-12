@@ -54,11 +54,18 @@ function dbStoryToStory(dbStory: DbStory): Story {
   };
 }
 
+export async function getAllStorySlugs(): Promise<string[]> {
+  const dbStories = await getDbStories();
+  const dbSlugs = dbStories.map(story => story.slug);
+  const staticSlugs = staticStories.map(story => story.slug);
+  return [...staticSlugs, ...dbSlugs];
+}
+
 
 export async function getAllStories(): Promise<Story[]> {
   const dbStories = await getDbStories();
   const allStories = [...staticStories, ...dbStories.map(dbStoryToStory)];
-  // No need to sort, as getDbStories already sorts by date
+  // The stories from DB are already sorted by date
   return allStories;
 }
 
