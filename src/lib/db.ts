@@ -25,10 +25,14 @@ export interface Comment {
   originalMessage?: string;
 }
 
+// --- Database Initialization ---
+
 // Use /tmp directory for the database to ensure writability on server environments
 const dbPath = process.env.NODE_ENV === 'development' 
   ? 'paddlefish.db' 
   : path.join('/tmp', 'paddlefish.db');
+
+let db: Database.Database;
 
 function initializeDb() {
     const dir = path.dirname(dbPath);
@@ -36,10 +40,11 @@ function initializeDb() {
         fs.mkdirSync(dir, { recursive: true });
     }
     
-    const db = new Database(dbPath);
+    const conn = new Database(dbPath);
+    conn.pragma('journal_mode = WAL');
     
     // Create tables if they don't exist
-    db.exec(`
+    conn.exec(`
         CREATE TABLE IF NOT EXISTS comments (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         author TEXT NOT NULL,
@@ -49,7 +54,7 @@ function initializeDb() {
         originalMessage TEXT
         )
     `);
-    db.exec(`
+    conn.exec(`
         CREATE TABLE IF NOT EXISTS stories (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         slug TEXT NOT NULL UNIQUE,
@@ -62,7 +67,7 @@ function initializeDb() {
     `);
 
     // Seed data if necessary
-    const commentCount = db.prepare('SELECT COUNT(*) as count FROM comments').get() as { count: number };
+    const commentCount = conn.prepare('SELECT COUNT(*) as count FROM comments').get() as { count: number };
     if (commentCount.count === 0) {
         const seed = [
             {
@@ -80,15 +85,15 @@ function initializeDb() {
             originalMessage: null,
             },
         ];
-        const insertComment = db.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
-        db.transaction((comments) => {
+        const insertComment = conn.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
+        conn.transaction((comments) => {
             for (const comment of comments) {
             insertComment.run(comment.author, comment.message, comment.createdAt.toISOString(), comment.isAppropriate, comment.originalMessage);
             }
         })(seed);
     }
     
-    const storyCount = db.prepare('SELECT COUNT(*) as count FROM stories').get() as { count: number };
+    const storyCount = conn.prepare('SELECT COUNT(*) as count FROM stories').get() as { count: number };
     if (storyCount.count === 0) {
         const seedStories = [
           {
@@ -107,8 +112,8 @@ function initializeDb() {
             author: 'Conservation Scientist',
             summary: 'An analysis of how dam construction on the Yangtze sealed the fate of the paddlefish.',
             content: `
-              <p>The story of the Chinese Paddlefish is inextricably linked to the story of the Yangtze River's development. For millennia, the fish followed an ancient migratory path, traveling hundreds of kilometers upstream to spawn. The construction of the Gezhouba Dam in 1981 was the first major blow. It was built without a fish ladder, creating an impassable barrier.</p>
-              <p>The paddlefish population was instantly fragmented. The fish downstream could no longer reach their spawning grounds. While some spawning may have occurred below the dam, it was insufficient to sustain the population. The later construction of the even larger Three Gorges Dam further altered the river's hydrology and sealed the species' fate. The river that had been its cradle for millions of years became its tomb.</p>
+              <p>The story of the Chinese Paddlefish is inextricably linked to the story of the Yangtze River\'s development. For millennia, the fish followed an ancient migratory path, traveling hundreds of kilometers upstream to spawn. The construction of the Gezhouba Dam in 1981 was the first major blow. It was built without a fish ladder, creating an impassable barrier.</p>
+              <p>The paddlefish population was instantly fragmented. The fish downstream could no longer reach their spawning grounds. While some spawning may have occurred below the dam, it was insufficient to sustain the population. The later construction of the even larger Three Gorges Dam further altered the river\'s hydrology and sealed the species\' fate. The river that had been its cradle for millions of years became its tomb.</p>
             `
           },
           {
@@ -122,92 +127,68 @@ function initializeDb() {
             `
           }
         ];
-        const insertStory = db.prepare('INSERT INTO stories (slug, title, author, summary, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)');
-        db.transaction((stories) => {
+        const insertStory = conn.prepare('INSERT INTO stories (slug, title, author, summary, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)');
+        conn.transaction((stories) => {
             for (const story of stories) {
                 insertStory.run(story.slug, story.title, story.author, story.summary, story.content, new Date().toISOString());
             }
         })(seedStories);
     }
-
-
-    return db;
+    return conn;
 }
+
+// Initialize the database connection once.
+db = initializeDb();
 
 
 // --- Comment Functions ---
 
 export async function getComments(): Promise<Comment[]> {
-  const db = initializeDb();
-  try {
-    const stmt = db.prepare('SELECT * FROM comments ORDER BY createdAt DESC');
-    const rows = stmt.all() as any[];
-    return rows.map(row => ({
-      ...row,
-      createdAt: new Date(row.createdAt),
-      isAppropriate: row.isAppropriate === 1,
-    }));
-  } finally {
-    db.close();
-  }
+  const stmt = db.prepare('SELECT * FROM comments ORDER BY createdAt DESC');
+  const rows = stmt.all() as any[];
+  return rows.map(row => ({
+    ...row,
+    createdAt: new Date(row.createdAt),
+    isAppropriate: row.isAppropriate === 1,
+  }));
 }
 
 export async function addComment(comment: Omit<Comment, 'id' | 'createdAt'>): Promise<Comment> {
-  const db = initializeDb();
-  try {
-    const createdAt = new Date();
-    const stmt = db.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
-    const result = stmt.run(
-        comment.author,
-        comment.message,
-        createdAt.toISOString(),
-        comment.isAppropriate ? 1 : 0,
-        comment.originalMessage
-    );
-    return { ...comment, id: result.lastInsertRowid as number, createdAt };
-  } finally {
-    db.close();
-  }
+  const createdAt = new Date();
+  const stmt = db.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
+  const result = stmt.run(
+      comment.author,
+      comment.message,
+      createdAt.toISOString(),
+      comment.isAppropriate ? 1 : 0,
+      comment.originalMessage
+  );
+  return { ...comment, id: result.lastInsertRowid as number, createdAt };
 }
 
 // --- Story Functions ---
 
 export async function getDbStories(): Promise<DbStory[]> {
-  const db = initializeDb();
-  try {
-    const stmt = db.prepare('SELECT id, slug, title, author, summary, content, createdAt FROM stories ORDER BY createdAt DESC');
-    return stmt.all() as DbStory[];
-  } finally {
-    db.close();
-  }
+  const stmt = db.prepare('SELECT id, slug, title, author, summary, content, createdAt FROM stories ORDER BY createdAt DESC');
+  return stmt.all() as DbStory[];
 }
 
 export async function addStory(story: Omit<DbStory, 'id' | 'createdAt'>): Promise<DbStory> {
-  const db = initializeDb();
-  try {
-    const createdAt = new Date();
-    const stmt = db.prepare('INSERT INTO stories (slug, title, author, summary, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)');
-    const result = stmt.run(
-        story.slug,
-        story.title,
-        story.author,
-        story.summary,
-        story.content,
-        createdAt.toISOString()
-    );
-    return { ...story, id: result.lastInsertRowid as number, createdAt: createdAt.toISOString() };
-  } finally {
-    db.close();
-  }
+  const createdAt = new Date();
+  const stmt = db.prepare('INSERT INTO stories (slug, title, author, summary, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)');
+  const result = stmt.run(
+      story.slug,
+      story.title,
+      story.author,
+      story.summary,
+      story.content,
+      createdAt.toISOString()
+  );
+  return { ...story, id: result.lastInsertRowid as number, createdAt: createdAt.toISOString() };
 }
 
 export async function getDbStoryBySlug(slug: string): Promise<DbStory | undefined> {
-  const db = initializeDb();
-  try {
-    const stmt = db.prepare('SELECT id, slug, title, author, summary, content, createdAt FROM stories WHERE slug = ?');
-    const row = stmt.get(slug) as DbStory | undefined;
-    return row;
-  } finally {
-    db.close();
-  }
+  const stmt = db.prepare('SELECT id, slug, title, author, summary, content, createdAt FROM stories WHERE slug = ?');
+  const row = stmt.get(slug) as DbStory | undefined;
+  return row;
 }
