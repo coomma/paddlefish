@@ -43,6 +43,7 @@ export default async function StoryPage({ params }: StoryPageProps) {
             <Link href="/stories" className="flex items-center text-accent">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Stories
+                
             </Link>
         </Button>
       </div>
