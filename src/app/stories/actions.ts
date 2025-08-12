@@ -68,8 +68,8 @@ export async function submitStory(
       content: htmlContent,
     });
     
-    // Revalidate the stories path to show the new story
-    revalidatePath('/stories');
+    // Revalidate the stories page for all locales.
+    revalidatePath('/[locale]/stories', 'page');
 
     return { message: 'Your story has been submitted.', success: true };
   } catch (error) {
