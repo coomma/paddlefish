@@ -17,11 +17,12 @@ type StoryPageProps = {
 // This allows Next.js to generate static pages for all stories at build time for all locales
 export async function generateStaticParams() {
   const allStories = await getAllStories();
- 
+  const allSlugs = allStories.map((story) => story.slug);
+
   const params = locales.flatMap((locale) =>
-    allStories.map((story) => ({
+    allSlugs.map((slug) => ({
       locale,
-      slug: story.slug,
+      slug,
     }))
   );
 
