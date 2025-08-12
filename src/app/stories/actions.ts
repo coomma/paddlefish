@@ -2,7 +2,6 @@
 
 import { z } from 'zod';
 import { addStory } from '@/lib/db';
-import { revalidatePath } from 'next/cache';
 
 export type FormState = {
   message: string;
@@ -68,9 +67,6 @@ export async function submitStory(
       content: htmlContent,
     });
     
-    // Revalidate the stories page for all locales.
-    revalidatePath('/[locale]/stories', 'page');
-
     return { message: 'Your story has been submitted.', success: true };
   } catch (error) {
     console.error('Error submitting story:', error);
