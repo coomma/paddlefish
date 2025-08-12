@@ -1,3 +1,5 @@
+export const dynamic = "force-static";
+// ...existing imports and code...
 import { getStoryBySlug, getAllStorySlugs } from '@/lib/stories';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
