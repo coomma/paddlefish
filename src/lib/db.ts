@@ -3,7 +3,6 @@
 
 import Database from 'better-sqlite3';
 import path from 'path';
-import fs from 'fs';
 
 // This represents the story as it is in the database.
 // The content is a raw HTML string.
@@ -33,23 +32,34 @@ const dbPath = path.join('/tmp', 'paddlefish.db');
 const db = new Database(dbPath);
 db.pragma('journal_mode = WAL');
 
-// Check if tables exist
-const commentsTableExists = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='comments';").get();
-const storiesTableExists = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='stories';").get();
+// Ensure tables are created
+db.exec(`
+    CREATE TABLE IF NOT EXISTS comments (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        author TEXT NOT NULL,
+        message TEXT NOT NULL,
+        createdAt DATETIME NOT NULL,
+        isAppropriate INTEGER NOT NULL,
+        originalMessage TEXT
+    )
+`);
+db.exec(`
+    CREATE TABLE IF NOT EXISTS stories (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        slug TEXT NOT NULL UNIQUE,
+        title TEXT NOT NULL,
+        author TEXT NOT NULL,
+        summary TEXT NOT NULL,
+        content TEXT NOT NULL,
+        createdAt DATETIME NOT NULL
+    )
+`);
 
-if (!commentsTableExists) {
-    db.exec(`
-        CREATE TABLE comments (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            author TEXT NOT NULL,
-            message TEXT NOT NULL,
-            createdAt DATETIME NOT NULL,
-            isAppropriate INTEGER NOT NULL,
-            originalMessage TEXT
-        )
-    `);
-    
-    // Seed data only when table is first created
+// --- Seeding Logic ---
+
+// Seed comments only if the table is empty
+const commentCount = db.prepare('SELECT COUNT(*) as count FROM comments').get() as { count: number };
+if (commentCount.count === 0) {
     const seedComments = [
         {
             author: 'River Enthusiast',
@@ -74,20 +84,9 @@ if (!commentsTableExists) {
     })(seedComments);
 }
 
-if (!storiesTableExists) {
-    db.exec(`
-        CREATE TABLE stories (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            slug TEXT NOT NULL UNIQUE,
-            title TEXT NOT NULL,
-            author TEXT NOT NULL,
-            summary TEXT NOT NULL,
-            content TEXT NOT NULL,
-            createdAt DATETIME NOT NULL
-        )
-    `);
-
-    // Seed data only when table is first created
+// Seed stories only if the table is empty
+const storyCount = db.prepare('SELECT COUNT(*) as count FROM stories').get() as { count: number };
+if (storyCount.count === 0) {
     const seedStories = [
       {
         slug: 'the-last-sighting',
