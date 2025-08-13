@@ -3,6 +3,7 @@
 
 import Database from 'better-sqlite3';
 import path from 'path';
+import fs from 'fs';
 
 // This represents the story as it is in the database.
 // The content is a raw HTML string.
@@ -32,7 +33,6 @@ export interface Comment {
 const dbPath = path.join('/tmp', 'paddlefish.db');
 
 // This function initializes the database and tables if they don't exist.
-// It is called once to ensure the DB file is ready.
 function initializeDatabase() {
   const db = new Database(dbPath);
   db.pragma('journal_mode = WAL');
@@ -134,13 +134,14 @@ function initializeDatabase() {
   db.close();
 }
 
-// Call the initialization function once when the module loads.
+// Ensure the database is initialized once when the module loads.
+// This is safe because node modules are cached.
 initializeDatabase();
 
 // --- Comment Functions ---
 
 export async function getComments(): Promise<Comment[]> {
-  const db = new Database(dbPath);
+  const db = new Database(dbPath, { readonly: true });
   try {
     const stmt = db.prepare('SELECT * FROM comments ORDER BY createdAt DESC');
     const rows = stmt.all() as any[];
@@ -175,7 +176,7 @@ export async function addComment(comment: Omit<Comment, 'id' | 'createdAt'>): Pr
 // --- Story Functions ---
 
 export async function getDbStories(): Promise<DbStory[]> {
-  const db = new Database(dbPath);
+  const db = new Database(dbPath, { readonly: true });
   try {
     const stmt = db.prepare('SELECT id, slug, title, author, summary, content, createdAt FROM stories ORDER BY createdAt DESC');
     return stmt.all() as DbStory[];
@@ -204,7 +205,7 @@ export async function addStory(story: Omit<DbStory, 'id' | 'createdAt'>): Promis
 }
 
 export async function getDbStoryBySlug(slug: string): Promise<DbStory | undefined> {
-  const db = new Database(dbPath);
+  const db = new Database(dbPath, { readonly: true });
   try {
     const stmt = db.prepare('SELECT id, slug, title, author, summary, content, createdAt FROM stories WHERE slug = ?');
     const row = stmt.get(slug) as DbStory | undefined;
