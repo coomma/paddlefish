@@ -5,8 +5,6 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, PlusCircle } from 'lucide-react';
 import { unstable_setRequestLocale } from 'next-intl/server';
 
-export const dynamic = 'force-dynamic';
-
 type StoriesPageProps = {
   params: {
     locale: string;
