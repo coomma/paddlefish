@@ -28,10 +28,9 @@ export interface Comment {
 // --- Database Initialization ---
 
 // Use /tmp directory for the database to ensure writability on server environments
-const dbPath = process.env.NODE_ENV === 'development' 
-  ? 'paddlefish.db' 
-  : path.join('/tmp', 'paddlefish.db');
+const dbPath = path.join('/tmp', 'paddlefish.db');
 
+let db: Database.Database;
 
 function initializeDb() {
     const dir = path.dirname(dbPath);
@@ -39,7 +38,7 @@ function initializeDb() {
         fs.mkdirSync(dir, { recursive: true });
     }
     
-    const db = new Database(dbPath);
+    db = new Database(dbPath);
     db.pragma('journal_mode = WAL');
     
     // Create tables if they don't exist
@@ -133,40 +132,24 @@ function initializeDb() {
             }
         })(seedStories);
     }
-    db.close();
 }
 
 // Call initialization once to ensure DB and tables exist
 initializeDb();
 
-// This function now gets a fresh connection for every call.
-const getDbConnection = () => {
-    const db = new Database(dbPath, { fileMustExist: true });
-    db.pragma('journal_mode = WAL');
-    return db;
-};
-
-
 // --- Comment Functions ---
 
 export async function getComments(): Promise<Comment[]> {
-  const db = getDbConnection();
-  try {
-    const stmt = db.prepare('SELECT * FROM comments ORDER BY createdAt DESC');
-    const rows = stmt.all() as any[];
-    return rows.map(row => ({
-      ...row,
-      createdAt: new Date(row.createdAt),
-      isAppropriate: row.isAppropriate === 1,
-    }));
-  } finally {
-    db.close();
-  }
+  const stmt = db.prepare('SELECT * FROM comments ORDER BY createdAt DESC');
+  const rows = stmt.all() as any[];
+  return rows.map(row => ({
+    ...row,
+    createdAt: new Date(row.createdAt),
+    isAppropriate: row.isAppropriate === 1,
+  }));
 }
 
 export async function addComment(comment: Omit<Comment, 'id' | 'createdAt'>): Promise<Comment> {
-  const db = getDbConnection();
-  try {
     const createdAt = new Date();
     const stmt = db.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
     const result = stmt.run(
@@ -177,26 +160,16 @@ export async function addComment(comment: Omit<Comment, 'id' | 'createdAt'>): Pr
         comment.originalMessage
     );
     return { ...comment, id: result.lastInsertRowid as number, createdAt };
-  } finally {
-    db.close();
-  }
 }
 
 // --- Story Functions ---
 
 export async function getDbStories(): Promise<DbStory[]> {
-  const db = getDbConnection();
-  try {
-    const stmt = db.prepare('SELECT id, slug, title, author, summary, content, createdAt FROM stories ORDER BY createdAt DESC');
-    return stmt.all() as DbStory[];
-  } finally {
-    db.close();
-  }
+  const stmt = db.prepare('SELECT id, slug, title, author, summary, content, createdAt FROM stories ORDER BY createdAt DESC');
+  return stmt.all() as DbStory[];
 }
 
 export async function addStory(story: Omit<DbStory, 'id' | 'createdAt'>): Promise<DbStory> {
-  const db = getDbConnection();
-  try {
     const createdAt = new Date();
     const stmt = db.prepare('INSERT INTO stories (slug, title, author, summary, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)');
     const result = stmt.run(
@@ -208,18 +181,10 @@ export async function addStory(story: Omit<DbStory, 'id' | 'createdAt'>): Promis
         createdAt.toISOString()
     );
     return { ...story, id: result.lastInsertRowid as number, createdAt: createdAt.toISOString() };
-  } finally {
-    db.close();
-  }
 }
 
 export async function getDbStoryBySlug(slug: string): Promise<DbStory | undefined> {
-  const db = getDbConnection();
-  try {
-    const stmt = db.prepare('SELECT id, slug, title, author, summary, content, createdAt FROM stories WHERE slug = ?');
-    const row = stmt.get(slug) as DbStory | undefined;
-    return row;
-  } finally {
-    db.close();
-  }
+  const stmt = db.prepare('SELECT id, slug, title, author, summary, content, createdAt FROM stories WHERE slug = ?');
+  const row = stmt.get(slug) as DbStory | undefined;
+  return row;
 }
