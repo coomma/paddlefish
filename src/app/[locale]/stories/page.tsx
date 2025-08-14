@@ -57,3 +57,5 @@ export default async function StoriesPage({ params: { locale } }: StoriesPagePro
     </div>
   );
 }
+
+    
