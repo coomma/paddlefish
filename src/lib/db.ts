@@ -33,109 +33,105 @@ export interface Comment {
 const dbPath = path.join('/tmp', 'paddlefish.db');
 
 // This function initializes the database and tables if they don't exist.
+// It should only be called once when the application starts.
 function initializeDatabase() {
+  const dbExisted = fs.existsSync(dbPath);
   const db = new Database(dbPath);
   db.pragma('journal_mode = WAL');
 
-  // Create tables if they don't exist
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS comments (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        author TEXT NOT NULL,
-        message TEXT NOT NULL,
-        createdAt DATETIME NOT NULL,
-        isAppropriate INTEGER NOT NULL,
-        originalMessage TEXT
-    )
-  `);
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS stories (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        slug TEXT NOT NULL UNIQUE,
-        title TEXT NOT NULL,
-        author TEXT NOT NULL,
-        summary TEXT NOT NULL,
-        content TEXT NOT NULL,
-        createdAt DATETIME NOT NULL
-    )
-  `);
+  if (!dbExisted) {
+    // Create tables only if the database file was just created
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS comments (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          author TEXT NOT NULL,
+          message TEXT NOT NULL,
+          createdAt DATETIME NOT NULL,
+          isAppropriate INTEGER NOT NULL,
+          originalMessage TEXT
+      )
+    `);
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS stories (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          slug TEXT NOT NULL UNIQUE,
+          title TEXT NOT NULL,
+          author TEXT NOT NULL,
+          summary TEXT NOT NULL,
+          content TEXT NOT NULL,
+          createdAt DATETIME NOT NULL
+      )
+    `);
 
-  // --- Seeding Logic ---
-  // Seed only if the tables are empty. This prevents wiping data on reloads.
-
-  const commentCount = (db.prepare('SELECT COUNT(*) as count FROM comments').get() as { count: number }).count;
-  if (commentCount === 0) {
-      const seedComments = [
-          {
-              author: 'River Enthusiast',
-              message: 'A tragic loss for the world. The Yangtze will never be the same. May we learn from this.',
-              createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
-              isAppropriate: 1,
-              originalMessage: null,
-          },
-          {
-              author: 'Jane D.',
-              message: 'I remember reading about this majestic fish as a child. It\'s heartbreaking to know it\'s gone forever. A beautiful memorial.',
-              createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
-              isAppropriate: 1,
-              originalMessage: null,
-          },
-      ];
-      const insertComment = db.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
-      db.transaction((comments) => {
-          for (const comment of comments) {
-              insertComment.run(comment.author, comment.message, comment.createdAt.toISOString(), comment.isAppropriate, comment.originalMessage);
-          }
-      })(seedComments);
-  }
-
-  const storyCount = (db.prepare('SELECT COUNT(*) as count FROM stories').get() as { count: number }).count;
-  if (storyCount === 0) {
-      const seedStories = [
+    // --- Seeding Logic ---
+    // Seed only if the database is being created for the first time.
+    const seedComments = [
         {
-          slug: 'the-last-sighting',
-          title: 'The Last Sighting',
-          author: 'River Historian',
-          summary: 'A detailed account of the final confirmed encounter with a Chinese Paddlefish in January 2003.',
-          content: `
-            <p>On a cold January day in 2003, along the Nanxi River, a tributary of the mighty Yangtze, fishermen inadvertently captured a living legend. It was a female Chinese Paddlefish, measuring over 3 meters long. The moment was bittersweet; a confirmation the species still existed, but also a stark reminder of its rarity.</p>
-            <p>Scientists, alerted to the catch, rushed to the scene. They attached an ultrasonic tracker to the fish, hoping to finally understand its mysterious underwater life. With great care, she was released back into the murky waters on January 27th. The team tracked her signal for a few precious hours before their boat was damaged, forcing them to abandon the pursuit. The signal faded, and with it, the last living trace of the Chinese Paddlefish. She was never seen again.</p>
-          `
+            author: 'River Enthusiast',
+            message: 'A tragic loss for the world. The Yangtze will never be the same. May we learn from this.',
+            createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
+            isAppropriate: 1,
+            originalMessage: null,
         },
         {
-          slug: 'the-dam-dilemma',
-          title: 'The Dam Dilemma',
-          author: 'Conservation Scientist',
-          summary: 'An analysis of how dam construction on the Yangtze sealed the fate of the paddlefish.',
-          content: `
-            <p>The story of the Chinese Paddlefish is inextricably linked to the story of the Yangtze River\'s development. For millennia, the fish followed an ancient migratory path, traveling hundreds of kilometers upstream to spawn. The construction of the Gezhouba Dam in 1981 was the first major blow. It was built without a fish ladder, creating an impassable barrier.</p>
-            <p>The paddlefish population was instantly fragmented. The fish downstream could no longer reach their spawning grounds. While some spawning may have occurred below the dam, it was insufficient to sustain the population. The later construction of the even larger Three Gorges Dam further altered the river\'s hydrology and sealed the species\' fate. The river that had been its cradle for millions of years became its tomb.</p>
-          `
+            author: 'Jane D.',
+            message: 'I remember reading about this majestic fish as a child. It\'s heartbreaking to know it\'s gone forever. A beautiful memorial.',
+            createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
+            isAppropriate: 1,
+            originalMessage: null,
         },
-        {
-          slug: 'a-fishermans-tale',
-          title: 'A Fisherman\'s Tale',
-          author: 'Elder Fisherman',
-          summary: 'A recollection from an old fisherman who remembers a time when the "King of Fish" was more common.',
-          content: `
-            <p>My father and his father before him fished the Yangtze. They spoke of the <em>bai xun</em>, the Chinese Paddlefish, with reverence. They called it the "King of Fish." In my youth, in the 1970s, seeing one was still possible, though it was always an event. They were immense, powerful creatures that commanded respect.</p>
-            <p>We never targeted them, but sometimes they would be caught in our nets. The meat was prized, but my father always said it was bad luck to catch one, that it meant the river was losing its spirit. By the time I was a man, they were like ghosts. A rumor of a sighting would ripple through the villages, but they were just stories.The river grew quieter, and the king was gone.</p>
-          `
+    ];
+    const insertComment = db.prepare('INSERT INTO comments (author, message, createdAt, isAppropriate, originalMessage) VALUES (?, ?, ?, ?, ?)');
+    db.transaction((comments) => {
+        for (const comment of comments) {
+            insertComment.run(comment.author, comment.message, comment.createdAt.toISOString(), comment.isAppropriate, comment.originalMessage);
         }
-      ];
-      const insertStory = db.prepare('INSERT INTO stories (slug, title, author, summary, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)');
-      db.transaction((stories) => {
-          for (const story of stories) {
-              insertStory.run(story.slug, story.title, story.author, story.summary, story.content, new Date().toISOString());
-          }
-      })(seedStories);
+    })(seedComments);
+
+    const seedStories = [
+      {
+        slug: 'the-last-sighting',
+        title: 'The Last Sighting',
+        author: 'River Historian',
+        summary: 'A detailed account of the final confirmed encounter with a Chinese Paddlefish in January 2003.',
+        content: `
+          <p>On a cold January day in 2003, along the Nanxi River, a tributary of the mighty Yangtze, fishermen inadvertently captured a living legend. It was a female Chinese Paddlefish, measuring over 3 meters long. The moment was bittersweet; a confirmation the species still existed, but also a stark reminder of its rarity.</p>
+          <p>Scientists, alerted to the catch, rushed to the scene. They attached an ultrasonic tracker to the fish, hoping to finally understand its mysterious underwater life. With great care, she was released back into the murky waters on January 27th. The team tracked her signal for a few precious hours before their boat was damaged, forcing them to abandon the pursuit. The signal faded, and with it, the last living trace of the Chinese Paddlefish. She was never seen again.</p>
+        `
+      },
+      {
+        slug: 'the-dam-dilemma',
+        title: 'The Dam Dilemma',
+        author: 'Conservation Scientist',
+        summary: 'An analysis of how dam construction on the Yangtze sealed the fate of the paddlefish.',
+        content: `
+          <p>The story of the Chinese Paddlefish is inextricably linked to the story of the Yangtze River\'s development. For millennia, the fish followed an ancient migratory path, traveling hundreds of kilometers upstream to spawn. The construction of the Gezhouba Dam in 1981 was the first major blow. It was built without a fish ladder, creating an impassable barrier.</p>
+          <p>The paddlefish population was instantly fragmented. The fish downstream could no longer reach their spawning grounds. While some spawning may have occurred below the dam, it was insufficient to sustain the population. The later construction of the even larger Three Gorges Dam further altered the river\'s hydrology and sealed the species\' fate. The river that had been its cradle for millions of years became its tomb.</p>
+        `
+      },
+      {
+        slug: 'a-fishermans-tale',
+        title: 'A Fisherman\'s Tale',
+        author: 'Elder Fisherman',
+        summary: 'A recollection from an old fisherman who remembers a time when the "King of Fish" was more common.',
+        content: `
+          <p>My father and his father before him fished the Yangtze. They spoke of the <em>bai xun</em>, the Chinese Paddlefish, with reverence. They called it the "King of Fish." In my youth, in the 1970s, seeing one was still possible, though it was always an event. They were immense, powerful creatures that commanded respect.</p>
+          <p>We never targeted them, but sometimes they would be caught in our nets. The meat was prized, but my father always said it was bad luck to catch one, that it meant the river was losing its spirit. By the time I was a man, they were like ghosts. A rumor of a sighting would ripple through the villages, but they were just stories.The river grew quieter, and the king was gone.</p>
+        `
+      }
+    ];
+    const insertStory = db.prepare('INSERT INTO stories (slug, title, author, summary, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)');
+    db.transaction((stories) => {
+        for (const story of stories) {
+            insertStory.run(story.slug, story.title, story.author, story.summary, story.content, new Date().toISOString());
+        }
+    })(seedStories);
   }
 
   db.close();
 }
 
-// Ensure the database is initialized once when the module loads.
-// This is safe because node modules are cached.
+// Run initialization once
 initializeDatabase();
 
 // --- Comment Functions ---
