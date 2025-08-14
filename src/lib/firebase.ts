@@ -1,6 +1,5 @@
 
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getDatabase } from "firebase/database";
+import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -12,9 +11,25 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
+let app: FirebaseApp | null = null;
+
 // Initialize Firebase
 export function initializeFirebase() {
-    if (!getApps().length) {
-        initializeApp(firebaseConfig);
+    if (app) {
+        return app;
     }
+
+    // During build, env vars can be undefined.
+    // Check for essential config before initializing.
+    if (firebaseConfig.projectId && firebaseConfig.databaseURL) {
+        if (!getApps().length) {
+            app = initializeApp(firebaseConfig);
+        } else {
+            app = getApp();
+        }
+        return app;
+    }
+
+    console.warn("Firebase config is missing. Skipping initialization. This is expected during build if env vars are not set.");
+    return null;
 }
