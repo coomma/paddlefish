@@ -1,7 +1,7 @@
 
 'use server';
 
-import { getDatabase, ref, set, get, push, child, serverTimestamp } from 'firebase/database';
+import { getDatabase, ref, set, get, push, child, serverTimestamp, Database } from 'firebase/database';
 import { initializeFirebase } from './firebase';
 
 export interface Comment {
@@ -23,18 +23,25 @@ export interface DbStory {
     createdAt: number; 
 }
 
+let dbInitialized = false;
 
-// --- Seeding Logic ---
-async function seedDatabase() {
+async function initializeDb() {
+    if (dbInitialized) return;
+
     const app = initializeFirebase();
-    if (!app) return; // Don't run if firebase is not initialized
-    const db = getDatabase(app);
+    if (!app) {
+        console.log("Firebase not initialized, skipping DB initialization.");
+        return;
+    }
     
-    // Seed Stories
+    const db = getDatabase(app);
+
+    // --- Seeding Logic ---
+    // Check if stories are already seeded
     const storiesRef = ref(db, 'stories');
     const storiesSnapshot = await get(storiesRef);
     if (!storiesSnapshot.exists()) {
-        console.log('No stories found. Seeding database...');
+        console.log('No stories found. Seeding stories...');
         const seedStories = {
           'the-last-sighting': {
             slug: 'the-last-sighting',
@@ -65,7 +72,7 @@ async function seedDatabase() {
         console.log('Stories seeded.');
     }
 
-    // Seed Comments
+    // Check if comments are already seeded
     const commentsRef = ref(db, 'comments');
     const commentsSnapshot = await get(commentsRef);
     if (!commentsSnapshot.exists()) {
@@ -80,14 +87,15 @@ async function seedDatabase() {
         }
         console.log('Comments seeded.');
     }
-}
 
-seedDatabase().catch(console.error);
+    dbInitialized = true;
+}
 
 
 // --- Comment Functions ---
 
 export async function getComments(): Promise<Comment[]> {
+    await initializeDb();
     const app = initializeFirebase();
     if (!app) return [];
 
@@ -132,6 +140,7 @@ export async function addComment(comment: Omit<Comment, 'id' | 'createdAt'>): Pr
 // --- Story Functions ---
 
 export async function getDbStories(): Promise<DbStory[]> {
+    await initializeDb();
     const app = initializeFirebase();
     if (!app) return [];
 
@@ -165,6 +174,7 @@ export async function addStory(story: Omit<DbStory, 'id' | 'createdAt'>): Promis
 }
 
 export async function getDbStoryBySlug(slug: string): Promise<DbStory | undefined> {
+    await initializeDb();
     const app = initializeFirebase();
     if (!app) return undefined;
 
