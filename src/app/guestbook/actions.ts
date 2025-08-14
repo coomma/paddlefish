@@ -1,3 +1,4 @@
+
 'use server';
 
 import { z, ZodSchema } from 'zod';
@@ -54,7 +55,7 @@ export async function submitComment(
 
     return { message: 'Your comment has been posted.', success: true };
   } catch (error) {
-    console.error(error);
+    console.error('Firebase Error:', error);
     return {
       message: 'An unexpected error occurred.',
       errors: { _form: ['Failed to submit comment. Please try again.'] },

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useFormState } from 'react-dom';
@@ -26,7 +27,13 @@ function SubmitButton({ children }: SubmitButtonProps) {
   );
 }
 
-export default function Guestbook({ initialComments }: { initialComments: Comment[] }) {
+// Convert Comment to have Date object for formatting
+type ClientComment = Omit<Comment, 'createdAt'> & {
+  createdAt: Date;
+};
+
+
+export default function Guestbook({ initialComments }: { initialComments: ClientComment[] }) {
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
 

@@ -2,7 +2,7 @@
 'use server';
 
 import { z } from 'zod';
-import { addStory } from '@/lib/db';
+import { addStory, getDbStoryBySlug } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 
 export type FormState = {
@@ -52,9 +52,20 @@ export async function submitStory(
   }
   
   const { author, title, content } = validatedFields.data;
-
+  
   try {
     const slug = createSlug(title);
+
+    // Check if a story with this slug already exists
+    const existingStory = await getDbStoryBySlug(slug);
+    if (existingStory) {
+      return {
+          message: 'A story with a similar title already exists. Please choose a different title.',
+          errors: { _form: ['A story with this title already exists.'] },
+          success: false,
+      };
+    }
+
     const summary = content.substring(0, 150) + '...';
 
     // The content for the DB should be raw HTML.
@@ -75,14 +86,6 @@ export async function submitStory(
     return { message: 'Your story has been submitted.', success: true };
   } catch (error) {
     console.error('Error submitting story:', error);
-    // Check for unique constraint error for the slug
-    if (error instanceof Error && error.message.includes('UNIQUE constraint failed: stories.slug')) {
-         return {
-            message: 'A story with a similar title already exists. Please choose a different title.',
-            errors: { _form: ['A story with this title already exists.'] },
-            success: false,
-        };
-    }
     return {
       message: 'An unexpected error occurred.',
       errors: { _form: ['Failed to submit story. Please try again later.'] },
