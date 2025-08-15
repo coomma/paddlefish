@@ -35,27 +35,33 @@ export default async function StoriesPage({ params: { locale } }: StoriesPagePro
       </div>
       
       <div className="space-y-8">
-        {stories.map((story: Story) => (
-          <Card key={story.slug} className="shadow-lg hover:shadow-xl transition-shadow">
-            <CardHeader>
-              <CardTitle className="font-headline text-2xl text-primary">{story.title}</CardTitle>
-              <CardDescription>By {story.author}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-foreground/90">{story.summary}</p>
-            </CardContent>
-            <CardFooter>
-              <Button asChild variant="link" className="px-0 text-accent">
-                <Link href={`/stories/${story.slug}`}>
-                  Read Full Story <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+        {stories.length > 0 ? (
+            stories.map((story: Story) => (
+              <Card key={story.slug} className="shadow-lg hover:shadow-xl transition-shadow">
+                <CardHeader>
+                  <CardTitle className="font-headline text-2xl text-primary">{story.title}</CardTitle>
+                  <CardDescription>By {story.author}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-foreground/90">{story.summary}</p>
+                </CardContent>
+                <CardFooter>
+                  <Button asChild variant="link" className="px-0 text-accent">
+                    <Link href={`/stories/${story.slug}`}>
+                      Read Full Story <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))
+        ) : (
+             <Card className="shadow-lg">
+                <CardContent className="p-10 text-center">
+                  <p className="text-muted-foreground">No stories have been shared yet. Be the first to share a memory.</p>
+                </CardContent>
+              </Card>
+        )}
       </div>
     </div>
   );
 }
-
-    
