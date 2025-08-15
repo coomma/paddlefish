@@ -1,8 +1,8 @@
 
 'use server';
 
-import { getDatabase, ref, set, get, push, serverTimestamp, query, orderByChild, limitToLast } from 'firebase/database';
-import { initializeFirebase } from './firebase';
+import { getDatabase, ref, set, get, push, serverTimestamp, query, orderByChild } from 'firebase/database';
+import { app } from '@/ai/genkit'; // Corrected import path
 
 export interface Comment {
   id: string;
@@ -20,13 +20,10 @@ export interface DbStory {
     author: string;
     summary: string;
     content: string;
-    createdAt: number; 
+    createdAt: any; // Allow for serverTimestamp
 }
 
-// --- Story Functions ---
-
 async function seedDatabase() {
-    const app = initializeFirebase();
     if (!app) return null;
     const db = getDatabase(app);
 
@@ -83,9 +80,9 @@ async function seedDatabase() {
     return null;
 }
 
+// --- Story Functions ---
 
 export async function getDbStories(): Promise<DbStory[]> {
-    const app = initializeFirebase();
     if (!app) {
         console.error("Firebase not initialized in getDbStories. Check environment variables.");
         return [];
@@ -107,7 +104,10 @@ export async function getDbStories(): Promise<DbStory[]> {
         } else {
             console.log('No stories found, seeding database...');
             const seededStories = await seedDatabase();
-            return seededStories ? seededStories.sort((a, b) => b.createdAt - a.createdAt) : [];
+            if (seededStories) {
+                return seededStories.sort((a, b) => b.createdAt - a.createdAt);
+            }
+            return [];
         }
     } catch (error) {
         console.error("Could not get stories from Firebase:", error);
@@ -116,7 +116,6 @@ export async function getDbStories(): Promise<DbStory[]> {
 }
 
 export async function addStory(story: Omit<DbStory, 'id' | 'createdAt'>): Promise<DbStory> {
-    const app = initializeFirebase();
     if (!app) throw new Error("Firebase not initialized. Cannot add story.");
 
     const db = getDatabase(app);
@@ -132,7 +131,6 @@ export async function addStory(story: Omit<DbStory, 'id' | 'createdAt'>): Promis
 }
 
 export async function getDbStoryBySlug(slug: string): Promise<DbStory | undefined> {
-    const app = initializeFirebase();
     if (!app) return undefined;
 
     const db = getDatabase(app);
@@ -149,7 +147,6 @@ export async function getDbStoryBySlug(slug: string): Promise<DbStory | undefine
 // --- Comment Functions ---
 
 export async function getComments(): Promise<Comment[]> {
-    const app = initializeFirebase();
     if (!app) {
         console.error("Firebase not initialized in getComments. Check environment variables.");
         return [];
@@ -172,8 +169,6 @@ export async function getComments(): Promise<Comment[]> {
                 .sort((a, b) => b.createdAt - a.createdAt)
                 .map(c => ({...c, createdAt: new Date(c.createdAt)}));
         } else {
-             // If there are no comments, it's fine, we don't need to seed them independently.
-             // Seeding happens with stories.
              return [];
         }
     } catch (error) {
@@ -183,7 +178,6 @@ export async function getComments(): Promise<Comment[]> {
 }
 
 export async function addComment(comment: Omit<Comment, 'id' | 'createdAt'>): Promise<Comment> {
-    const app = initializeFirebase();
     if (!app) throw new Error("Firebase not initialized. Cannot add comment.");
     
     const db = getDatabase(app);
