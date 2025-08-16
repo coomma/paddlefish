@@ -3,13 +3,14 @@ import Image from "next/image";
 import { unstable_setRequestLocale } from "next-intl/server";
 
 const images = [
-  { src: "https://placehold.co/600x400.png", alt: "Chinese Paddlefish illustration", hint: "paddlefish illustration" },
-  { src: "https://placehold.co/600x400.png", alt: "Yangtze River", hint: "Yangtze river" },
-  { src: "https://placehold.co/600x400.png", alt: "Preserved specimen of a Chinese Paddlefish", hint: "fish museum" },
-  { src: "https://placehold.co/600x400.png", alt: "A historical photo of a fisherman with a Paddlefish", hint: "vintage fishing" },
-  { src: "https://placehold.co/600x400.png", alt: "Artistic rendering of a swimming Paddlefish", hint: "fish underwater" },
-  { src: "https://placehold.co/600x400.png", alt: "The misty mountains along the Yangtze", hint: "river china" },
-];
+  { src: "/images/fish1.webp", alt: "A fish in a pond", hint: "fish pond" },
+  { src: "/images/fish2.webp", alt: "A fish in a pond", hint: "fish pond" },
+  { src: "/images/poemfish.png", alt: "Chinese Paddlefish illustration", hint: "paddlefish illustration" },
+  { src: "/images/poemfish2.png", alt: "Yangtze River", hint: "Yangtze river" },
+  { src: "/images/Yangtze1.jpg", alt: "Preserved specimen of a Chinese Paddlefish", hint: "fish museum" },
+  { src: "/images/Yangtze2.jpg", alt: "A historical photo of a fisherman with a Paddlefish", hint: "vintage fishing" },
+  { src: "/images/Yangtze3.jpg", alt: "Artistic rendering of a swimming Paddlefish", hint: "fish underwater" },
+  ];
 
 export default function PicturesPage({ params: { locale } }: { params: { locale: string } }) {
   unstable_setRequestLocale(locale);
