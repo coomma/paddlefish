@@ -40,7 +40,7 @@ export async function submitComment(
   const { author, message } = validatedFields.data;
 
   try {
-    addComment({
+    await addComment({
       author,
       message,
       isAppropriate: true, // Bypassing moderation for now
