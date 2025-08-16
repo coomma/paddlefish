@@ -23,13 +23,13 @@ function dbStoryToStory(dbStory: DbStory): Story {
   };
 }
 
-export function getAllStories(): Story[] {
-  const dbStories = getDbStories();
+export async function getAllStories(): Promise<Story[]> {
+  const dbStories = await getDbStories();
   return dbStories.map(dbStoryToStory);
 }
 
-export function getStoryBySlug(slug: string): Story | undefined {
-  const dbStory = getDbStoryBySlug(slug);
+export async function getStoryBySlug(slug: string): Promise<Story | undefined> {
+  const dbStory = await getDbStoryBySlug(slug);
   if (dbStory) {
     return dbStoryToStory(dbStory);
   }

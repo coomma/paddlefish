@@ -1,3 +1,4 @@
+
 import { getStoryBySlug } from '@/lib/stories';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -13,9 +14,9 @@ type StoryPageProps = {
   };
 };
 
-export default function StoryPage({ params }: StoryPageProps) {
+export default async function StoryPage({ params }: StoryPageProps) {
   unstable_setRequestLocale(params.locale);
-  const story = getStoryBySlug(params.slug);
+  const story = await getStoryBySlug(params.slug);
 
   if (!story) {
     notFound();

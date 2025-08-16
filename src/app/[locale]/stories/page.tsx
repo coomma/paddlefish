@@ -14,9 +14,9 @@ type StoriesPageProps = {
   };
 };
 
-export default function StoriesPage({ params: { locale } }: StoriesPageProps) {
+export default async function StoriesPage({ params: { locale } }: StoriesPageProps) {
   unstable_setRequestLocale(locale);
-  const stories = getAllStories();
+  const stories = await getAllStories();
 
   return (
     <div className="max-w-4xl mx-auto">

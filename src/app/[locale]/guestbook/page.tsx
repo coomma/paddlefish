@@ -4,9 +4,9 @@ import Guestbook from '@/components/guestbook/Guestbook';
 import { unstable_setRequestLocale } from 'next-intl/server';
 import { Mail } from 'lucide-react';
 
-export default function GuestbookPage({ params: { locale } }: { params: { locale: string } }) {
+export default async function GuestbookPage({ params: { locale } }: { params: { locale: string } }) {
   unstable_setRequestLocale(locale);
-  const comments = getComments();
+  const comments = await getComments();
 
   return (
     <div className="max-w-4xl mx-auto">
