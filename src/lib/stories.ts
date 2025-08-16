@@ -2,6 +2,7 @@
 import { getDbStories, getDbStoryBySlug, DbStory } from "./db";
 
 export type Story = {
+  id: number;
   slug: string;
   title: string;
   author: string;
@@ -12,6 +13,7 @@ export type Story = {
 
 function dbStoryToStory(dbStory: DbStory): Story {
   return {
+    id: dbStory.id,
     slug: dbStory.slug,
     title: dbStory.title,
     author: dbStory.author,
@@ -21,14 +23,13 @@ function dbStoryToStory(dbStory: DbStory): Story {
   };
 }
 
-export async function getAllStories(): Promise<Story[]> {
-  const dbStories = await getDbStories();
-  // Sort by date again just in case, as Firebase object-to-array conversion doesn't guarantee order
-  return dbStories.sort((a, b) => b.createdAt - a.createdAt).map(dbStoryToStory);
+export function getAllStories(): Story[] {
+  const dbStories = getDbStories();
+  return dbStories.map(dbStoryToStory);
 }
 
-export async function getStoryBySlug(slug: string): Promise<Story | undefined> {
-  const dbStory = await getDbStoryBySlug(slug);
+export function getStoryBySlug(slug: string): Story | undefined {
+  const dbStory = getDbStoryBySlug(slug);
   if (dbStory) {
     return dbStoryToStory(dbStory);
   }

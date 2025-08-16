@@ -57,7 +57,7 @@ export async function submitStory(
     const slug = createSlug(title);
 
     // Check if a story with this slug already exists
-    const existingStory = await getDbStoryBySlug(slug);
+    const existingStory = getDbStoryBySlug(slug);
     if (existingStory) {
       return {
           message: 'A story with a similar title already exists. Please choose a different title.',
@@ -72,7 +72,7 @@ export async function submitStory(
     // We will wrap paragraphs in <p> tags.
     const htmlContent = '<p>' + content.replace(/\n/g, '</p><p>') + '</p>';
     
-    await addStory({
+    addStory({
       slug,
       title,
       author,

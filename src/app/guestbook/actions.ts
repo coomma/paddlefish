@@ -1,8 +1,7 @@
 
 'use server';
 
-import { z, ZodSchema } from 'zod';
-import { moderateGuestbookComment } from '@/ai/flows/guestbook-comment-moderation';
+import { z } from 'zod';
 import { addComment } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 
@@ -16,7 +15,6 @@ export type FormState = {
   success: boolean;
 };
 
-// Define the schema here, it's a server-concern
 const commentSchema = z.object({
   author: z.string().min(2, { message: "Name must be at least 2 characters." }).max(50),
   message: z.string().min(10, { message: "Message must be at least 10 characters." }).max(500),
@@ -42,20 +40,17 @@ export async function submitComment(
   const { author, message } = validatedFields.data;
 
   try {
-    const moderationResult = await moderateGuestbookComment({ comment: message });
-    
-    await addComment({
+    addComment({
       author,
-      message: moderationResult.moderatedComment,
-      isAppropriate: moderationResult.isAppropriate,
-      originalMessage: message !== moderationResult.moderatedComment ? message : undefined,
+      message,
+      isAppropriate: true, // Bypassing moderation for now
     });
     
     revalidatePath('/guestbook');
 
     return { message: 'Your comment has been posted.', success: true };
   } catch (error) {
-    console.error('Firebase Error:', error);
+    console.error('Database Error:', error);
     return {
       message: 'An unexpected error occurred.',
       errors: { _form: ['Failed to submit comment. Please try again.'] },

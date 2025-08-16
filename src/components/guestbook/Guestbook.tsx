@@ -67,7 +67,7 @@ export default function Guestbook({ initialComments }: { initialComments: Client
       <Card className="shadow-lg">
         <CardHeader>
           <CardTitle className="font-headline text-2xl">Leave a Comment</CardTitle>
-          <CardDescription>Your message will be reviewed by our AI moderator to ensure a respectful environment.</CardDescription>
+          <CardDescription>Share your thoughts and memories.</CardDescription>
         </CardHeader>
         <form ref={formRef} action={formAction}>
           <CardContent className="space-y-4">
@@ -117,12 +117,6 @@ export default function Guestbook({ initialComments }: { initialComments: Client
                   {format(comment.createdAt, "MMMM d, yyyy")}
                 </time>
               </div>
-               {comment.originalMessage && (
-                  <div className="mt-4 p-3 bg-secondary/50 rounded-lg text-xs text-muted-foreground flex items-start gap-2">
-                    <Bot className="h-4 w-4 flex-shrink-0 mt-0.5" />
-                    <span>This comment was automatically rewritten by AI to maintain a respectful tone.</span>
-                  </div>
-                )}
             </CardContent>
           </Card>
         ))}
