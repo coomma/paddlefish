@@ -1,12 +1,10 @@
 
-'use server';
-
 import Database from 'better-sqlite3';
 import fs from 'fs';
 import path from 'path';
 
 // Define the path for the database file.
-// Using a sub-directory in /tmp to ensure it's writable in most environments.
+// Using a sub-directory in the project root to ensure it's writable and persistent.
 const dbDir = path.join(process.cwd(), '.db');
 const dbPath = path.join(dbDir, 'paddlefish.db');
 
