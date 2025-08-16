@@ -13,6 +13,7 @@ import {
     type Comment 
 } from './db-server';
 
+// Re-export types
 export * from './db-server';
 
 export async function getDbStories(): Promise<DbStory[]> {

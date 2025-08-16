@@ -1,3 +1,4 @@
+
 // This file contains the synchronous, server-only database logic using better-sqlite3.
 // It should not be imported directly into any component or file that uses 'use server'.
 // It is wrapped by `db.ts` which provides an async interface.
